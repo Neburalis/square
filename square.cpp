@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#define min_value 0.0001
+#define MIN_VALUE 0.0001
 
 double safe_get_double(char var){
     int result;
@@ -15,10 +15,15 @@ double safe_get_double(char var){
     }
 }
 
+bool is_zero(double a){
+    if (fabs(a) < MIN_VALUE) return true;
+    else return false;
+}
+
 int main(){
     start:
     // ax^2 + bx + c = 0
-    double a, b, c;
+    double a = 0, b = 0, c = 0;
 
     printf("🧮 Программа для решения квадратного уравнения ax^2 + bx + c = 0\n");
     printf("📝 Введите коэффициенты a, b и c каждый в новой строке.\n");
@@ -28,7 +33,7 @@ int main(){
 
     printf("📊 %.2lfx^2 + %.2lfx + %.2lfc = 0\n", a, b, c);
 
-    if (fabs(a) > min_value){
+    if (!is_zero(a)){
         double d = b * b - 4 * a * c;
 
         printf("🔍 d = %.2lf\n", d);
@@ -40,7 +45,7 @@ int main(){
                 "x1 = %lf\n"
                 "x2 = %lf\n", x1, x2);
         }
-        else if (fabs(d) < min_value){
+        else if (is_zero(d)){
             double x = (-b)/(2*a);
             printf("🎯 one solution:\n"
                 "x = %lf", x);
@@ -49,7 +54,7 @@ int main(){
             printf("❌ no solutions");
         }
     }
-    else if (fabs(b) > min_value){
+    else if (!is_zero(b)){
 
         double x = -(c / b);
         printf("🎯 one solution:\n"
@@ -59,8 +64,10 @@ int main(){
         printf("❌ no solutions");
     }
 
-    char choice;
+    int choice;
     printf("\n🔄 Хотите решить еще одно уравнение? (Y/n)");
-    scanf("%c", &choice);
+    choice = getchar();
     if (choice == 'Y' || choice == 'y') goto start;
+
+    return 0;
 }
