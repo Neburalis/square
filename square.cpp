@@ -68,7 +68,7 @@ int main(){
     int choice = '\0';
 
     do {
-        input_square_koef(&a, &b, &c); 
+        input_square_koef(&a, &b, &c);
         n_solutions = square_solver(a, b, c, &x1, &x2);
         minus_zero_check(&x1);
         minus_zero_check(&x2);
@@ -150,15 +150,15 @@ int square_solver(double a, double b, double c,
             *x1 = *x2 = -b / (2*a);
             return 1;
         }
-        else{ //if (d < 0)
+        else { //if (d < 0)
             return 0;
         }
     }
-    else if (!is_zero(b)){
+    else if (!is_zero(b)) {
         *x1 = *x2 = -c / b;
         return 1;
     }
-    else if (!is_zero(c)){
+    else if (!is_zero(c)) {
         return 0;
     }
     else { // a = 0  b = 0  c = 0
