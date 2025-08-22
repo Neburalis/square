@@ -16,6 +16,7 @@ double safe_get_double(char var){
 }
 
 int main(){
+    start:
     // ax^2 + bx + c = 0
     double a, b, c;
 
@@ -25,12 +26,12 @@ int main(){
     b = safe_get_double('b');
     c = safe_get_double('c');
 
-    printf("📊 %lfx^2 + %lfx + %lfc = 0\n", a, b, c);
+    printf("📊 %.2lfx^2 + %.2lfx + %.2lfc = 0\n", a, b, c);
 
     if (fabs(a) > min_value){
         double d = b * b - 4 * a * c;
 
-        printf("🔍 d = %lf\n", d);
+        printf("🔍 d = %.2lf\n", d);
 
         if (d > 0){
             double x1 = (-b + sqrt(d))/(2*a);
@@ -48,9 +49,18 @@ int main(){
             printf("❌ no solutions");
         }
     }
-    else {
+    else if (fabs(b) > min_value){
+
         double x = -(c / b);
         printf("🎯 one solution:\n"
             "x = %lf", x);
     }
+    else {
+        printf("❌ no solutions");
+    }
+
+    char choice;
+    printf("\n🔄 Хотите решить еще одно уравнение? (Y/n)");
+    scanf("%c", &choice);
+    if (choice == 'Y' || choice == 'y') goto start;
 }
