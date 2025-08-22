@@ -10,3 +10,4 @@ $(TARGET): $(SOURCE)
 .PHONY: clean
 clean:
 	rm -f $(TARGET)
+	rm -rf $(TARGET).dSYM
