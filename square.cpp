@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
-#include "real_number_utils.c"
 
-const int SS_INF_SOLUTIONS = -1;
+#include "real_number_utils.cpp"
+
+// const int SS_INF_SOLUTIONS = -1;
 
 enum ss_status {
-    INF = -1,
-    NO = 0,
-    ONE = 1,
-    TWO = 2,
+    INF       = -1,
+    NO        = 0,
+    ONE       = 1,
+    TWO       = 2,
     NOT_SOLVE = -2,
-    NOT_INPUT = -3
+    NOT_INPUT = -3,
 };
 
 struct square_equation {
@@ -22,7 +23,12 @@ struct square_equation {
     double ans1;
     double ans2;
 };
-
+// TODO: add consts everywhere
+// TODO: add asserts
+// TODO: handle all switch cases
+// TODO: split into more functions
+// TODO: use isfinite() where necessary
+// TODO: split into files
 int square_solver(struct square_equation *eq) {
     assert(eq != NULL);
 
@@ -63,8 +69,9 @@ int square_solver(struct square_equation *eq) {
     }
 }
 
-void input_square_koef(struct square_equation *eq) {
+void input_square_koef(struct square_equation * eq) {
     assert(eq != NULL);
+
     printf("🧮 Программа для решения квадратного уравнения ax^2 + bx + c = 0\n"
            "📝 Введите коэффициенты a, b и c каждый в новой строке.\n");
     eq->kf_a = safe_get_double('a');
@@ -95,16 +102,23 @@ int output_square_solver_result(struct square_equation *eq) {
             break;
         default:
             printf("ERROR: unexpected value in n_solutions, n_solutions = %d", eq->status);
-            return 0;
+            return 0; // todo return enum
     }
     return 1;
 }
 
 int main(){
-    int choice = '\0';
+    int choice = 0;
 
     do {
-        struct square_equation eq = {.status=NOT_INPUT, .kf_a=NAN, .kf_b=NAN, .kf_c=NAN, .ans1=NAN, .ans2=NAN};
+        square_equation eq = {
+            .status = NOT_INPUT,
+            .kf_a   = NAN,
+            .kf_b   = NAN,
+            .kf_c   = NAN,
+            .ans1   = NAN,
+            .ans2   = NAN,
+        };
 
         input_square_koef(&eq);
         square_solver(&eq);
