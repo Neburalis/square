@@ -1,30 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include "real_number_utils.c"
 
-const double MIN_TOLERANCE = 0.0001;
 const int SS_INF_SOLUTIONS = -1;
-
-int clear_stdin_buffer();
-
-double safe_get_double(char var_name);
-
-int is_zero(double a);
-
-// -------
-//!
-//! Func to compare real numbers.
-//! if compare_double < 0 => a < b
-//! if compare_double == 0 => a == b (Taking into account tolerance MIN_TOLERANCE)
-//! if compare_double > 0 => a > b
-//!
-// ----
-int compare_double(double a, double b);
 
 int square_solver(double a, double b, double c,
                     double *x1, double *x2);
-
-int minus_zero_check(double *variable);
 
 void input_square_koef(double *a, double *b, double *c) {
     assert(a != NULL && b != NULL && c != NULL && a != b && a != c && b != c);
@@ -80,50 +62,12 @@ int main(){
         do {
             choice = getchar();
         }
-        while (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N');
+        while (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N' && choice != '\n');
     }
     while (choice == 'Y' || choice == 'y')
         ;
 
     return 0;
-}
-
-int clear_stdin_buffer(){
-    while (getchar() != '\n')
-        continue;
-    return 1;
-}
-
-double safe_get_double(char var_name) {
-    int scanf_status = -1;
-    double var = NAN;
-    for (;;) {
-        printf("%c = ", var_name);
-        scanf_status = scanf("%lg", &var);
-        clear_stdin_buffer();
-        if (scanf_status && !isinf(var))
-            return var;
-        printf("😢 Вы ввели число, которое я не смог распознать. "
-               "Попробуйте ввести правильное число (например 12.34). "
-               "Десятичный разделитель точка (.).\n");
-    }
-}
-
-int is_zero(double a) {
-    if (fabs(a) < MIN_TOLERANCE)
-        return 1;
-    return 0;
-}
-
-int compare_double(double a, double b) {
-    assert(!isnan(a) && !isnan(b));
-
-    if (fabs(a - b) < MIN_TOLERANCE)
-        return 0;
-    else if (a > b)
-        return 1;
-    // else if (b < a)
-    return -1;
 }
 
 int square_solver(double a, double b, double c,
@@ -164,12 +108,4 @@ int square_solver(double a, double b, double c,
     else { // a = 0  b = 0  c = 0
         return SS_INF_SOLUTIONS;
     }
-}
-
-int minus_zero_check(double *variable) {
-    if (is_zero(*variable)){
-        *variable = 0;
-        return 1;
-    }
-    return -1;
 }
