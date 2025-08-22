@@ -1,7 +1,19 @@
 #include <stdio.h>
 #include <math.h>
 
-#define min_value 0.001
+#define min_value 0.0001
+
+double safe_get_double(char var){
+    int result;
+    double a;
+    for (;;){
+        printf("%c = ", var);
+        result = scanf("%lf", &a);
+        while (getchar() != '\n');
+        if (result) return a;
+        printf("Вы ввели число, которое я не смог распознать. Попробуйте ввести правильное число (например 12.34). Десятичный разделитель точка (.).\n");
+    }
+}
 
 int main(){
     // ax^2 + bx + c = 0
@@ -9,12 +21,9 @@ int main(){
 
     printf("Программа для решения квадратного уравнения ax^2 + bx + c = 0\n");
     printf("Введите коэффициенты a, b и c каждый в новой строке.\n");
-    printf("a = ");
-    scanf("%lf", &a);
-    printf("b = ");
-    scanf("%lf", &b);
-    printf("c = ");
-    scanf("%lf", &c);
+    a = safe_get_double('a');
+    b = safe_get_double('b');
+    c = safe_get_double('c');
 
     printf("%lfx^2 + %lfx + %lfc = 0\n", a, b, c);
 
