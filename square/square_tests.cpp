@@ -5,6 +5,8 @@
 #include "math_equation_solver.h"
 #include "real_number_utils.h"
 
+#include "square_tests.h"
+
 int TEST_square_solver(int * const count_tests) {
     /*
     (1, -3, 2) -> TWO, 1, 2
