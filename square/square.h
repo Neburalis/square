@@ -1,7 +1,7 @@
 #ifndef SQUARE_H
 #define SQUARE_H
 
-#include "math_equation_solver.h"
+#include "../math_equation_solver/math_equation_solver.h"
 
 enum ss_status {
     NOT_INPUT  = -3,

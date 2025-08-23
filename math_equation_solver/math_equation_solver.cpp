@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "math_equation_solver.h"
-#include "real_number_utils.h"
+#include "../real_number_utils/real_number_utils.h"
 
 // enum solutions_count {
 //     NO  = 0,

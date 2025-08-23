@@ -2,10 +2,10 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "square.h"
-#include "io_utils.h"
-#include "math_equation_solver.h"
-#include "real_number_utils.h"
+#include "square/square.h"
+#include "io_utils/io_utils.h"
+#include "math_equation_solver/math_equation_solver.h"
+#include "real_number_utils/real_number_utils.h"
 
 //TODO: option selfcheck help (getopt)
 

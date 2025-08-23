@@ -1,7 +1,7 @@
 #ifndef REAL_NUMBER_UTILS_H
 #define REAL_NUMBER_UTILS_H
 
-int is_zero(double a);
+int is_zero (double var);
 int TEST_is_zero(int * const count_tests);
 
 // -------
