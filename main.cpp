@@ -6,6 +6,7 @@
 #include "io_utils/io_utils.h"
 #include "math_equation_solver/math_equation_solver.h"
 #include "real_number_utils/real_number_utils.h"
+#include "real_number_utils/real_number_utils_tests.h"
 
 //TODO: option selfcheck help (getopt)
 
