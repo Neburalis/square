@@ -30,7 +30,7 @@ int minus_zero_fix(double * const variable) {
     assert(isfinite(*variable));
 
     if (is_zero(*variable)){
-        *variable = 0;
+        *variable = fabs(*variable);
         return 1;
     }
     return -1;
