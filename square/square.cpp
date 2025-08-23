@@ -4,11 +4,12 @@
 
 #include "square.h"
 
-#include "../io_utils/io_utils.h"
-#include "../real_number_utils/real_number_utils.h"
+#include "io_utils.h"
+#include "real_number_utils.h"
 
 enum solutions_count square_solver(struct square_equation * const eq) {
     assert(eq != NULL);
+    assert(eq->status == NOT_SOLVE);
 
     double a = eq->kf_a, b = eq->kf_b, c = eq->kf_c;
 

@@ -218,3 +218,71 @@ int TEST_compare_double(int * const count_tests) {
 
     return is_passed;
 }
+
+int TEST_minus_zero_fix(int * const count_tests) {
+    /*
+    (1)  -> -1, 1
+    (-1) -> -1, -1
+    (0)  -> 1, 0
+    (-0) -> 1, 0
+    */
+
+    int is_passed = 0;
+    double x = 0;
+    int ans = 0;
+
+    x = 1;
+    if (!(
+        ((ans = minus_zero_fix(&x)) == -1) && (compare_double(x, 1) == 0)
+        )) {
+        printf("TEST FAILED:\n"
+               "minus_zero_fix(1) -> ans = %d\n, x = %lf"
+               "(should be -1, 1)",
+               ans, x);
+        is_passed = -1;
+    }
+    else
+        ++*count_tests;
+
+    x = -1;
+    if (!(
+        ((ans = minus_zero_fix(&x)) == -1) && (compare_double(x, -1) == 0)
+        )) {
+        printf("TEST FAILED:\n"
+               "minus_zero_fix(-1) -> ans = %d\n, x = %lf"
+               "(should be -1, -1)",
+               ans, x);
+        is_passed = -1;
+    }
+    else
+        ++*count_tests;
+
+    x = 0;
+    if (!(
+        ((ans = minus_zero_fix(&x)) == 1) && (is_zero(x))
+        )) {
+        printf("TEST FAILED:\n"
+               "minus_zero_fix(0) -> ans = %d\n, x = %lf"
+               "(should be 1, 0)",
+               ans, x);
+        is_passed = -1;
+    }
+    else
+        ++*count_tests;
+
+    x = 0;
+    x = -x;
+    if (!(
+        ((ans = minus_zero_fix(&x)) == 1) && (is_zero(x))
+        )) {
+        printf("TEST FAILED:\n"
+               "minus_zero_fix(-0) -> ans = %d\n, x = %lf"
+               "(should be 1, 0)",
+               ans, x);
+        is_passed = -1;
+    }
+    else
+        ++*count_tests;
+
+    return is_passed;
+}
