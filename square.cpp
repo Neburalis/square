@@ -6,10 +6,6 @@
 
 #include "io_utils.h"
 #include "real_number_utils.h"
-// #include "math_equation_solver.h"
-
-const int SS_INF_SOLUTIONS = -1;
-
 
 enum solutions_count square_solver(struct square_equation * const eq) {
     assert(eq != NULL);

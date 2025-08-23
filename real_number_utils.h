@@ -2,6 +2,7 @@
 #define REAL_NUMBER_UTILS_H
 
 int is_zero(double a);
+int TEST_is_zero(int * const count_tests);
 
 // -------
 //!
@@ -12,6 +13,7 @@ int is_zero(double a);
 //!
 // ----
 int compare_double(double a, double b);
+int TEST_compare_double(int * const count_tests);
 
 int minus_zero_fix(double * const variable);
 

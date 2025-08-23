@@ -10,8 +10,10 @@ enum solutions_count {
 
 enum solutions_count solve_square_equation(double a, double b, double c,
                           double * const x1, double * const x2);
+int TEST_solve_square_equation(int * const count_tests);
 
 enum solutions_count solve_linear_equation(double a, double b,
                           double * const x);
+int TEST_solve_linear_equation(int * const count_tests);
 
 #endif // MATH_EQUATION_SOLVER_H
