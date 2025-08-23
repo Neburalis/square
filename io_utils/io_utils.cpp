@@ -4,25 +4,33 @@
 
 #include "io_utils.h"
 
-// int choice = 0;
-
 int clear_stdin_buffer() {
     while (getchar() != '\n')
         continue;
     return 1;
 }
 
+int is_stdin_buffer_clean() {
+    int c = 0;
+    while ((c = getchar()) != '\n') {
+        if (c == ' ' || c == '\t')
+            continue;
+        return 0;
+    }
+    return 1;
+}
+
 double safe_get_double(const char * const var_name) {
     assert(var_name != NULL);
 
-    int scanf_status = -1;
+    int scanf_status = 0;
     double var = NAN;
     for (;;) {
-        printf("%s = ", var_name);
+        printf("%s", var_name);
         scanf_status = scanf("%lg", &var);
-        clear_stdin_buffer();
-        if (scanf_status && !isinf(var))
+        if (scanf_status && !isinf(var) && is_stdin_buffer_clean())
             return var;
+        clear_stdin_buffer();
         printf("😢 Вы ввели число, которое я не смог распознать. "
                "Попробуйте ввести правильное число (например 12.34). "
                "Десятичный разделитель точка (.).\n");
