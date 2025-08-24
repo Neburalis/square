@@ -7,310 +7,185 @@
 
 #include "square_tests.h"
 
+struct TEST_DATA_square_solver {
+    uint16_t ss_test_n;
+    double ss_kf_a;
+    double ss_kf_b;
+    double ss_kf_c;
+    enum solutions_count ss_reference_nRoots;
+    double ss_reference_ans1;
+    double ss_reference_ans2;
+};
+
+static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_data) {
+    int is_failed = 0;
+
+    struct square_equation eq = {
+        .status = NOT_SOLVE,
+        .kf_a   = test_data->ss_kf_a,
+        .kf_b   = test_data->ss_kf_b,
+        .kf_c   = test_data->ss_kf_c,
+        .ans1   = NAN,
+        .ans2   = NAN,
+    };
+
+    enum solutions_count n_roots =
+        square_solver(&eq);
+
+    if (n_roots == test_data->ss_reference_nRoots) {
+        switch (test_data->ss_reference_nRoots){
+            case INF:
+                break;
+            case NO:
+                break;
+            case ONE:
+                if (!(compare_double(eq.ans1, test_data->ss_reference_ans1) == 0))
+                    is_failed = 1;
+                break;
+            case TWO:
+                if (!((compare_double(eq.ans1, test_data->ss_reference_ans1) == 0 && compare_double(eq.ans2, test_data->ss_reference_ans2) == 0) ||
+                      (compare_double(eq.ans2, test_data->ss_reference_ans1) == 0 && compare_double(eq.ans1, test_data->ss_reference_ans2) == 0)))
+                    is_failed = 1;
+                break;
+            default:
+                is_failed = 2;
+                break;
+        }
+    }
+    else{
+        is_failed = 1;
+    }
+
+    if (is_failed)
+        fprintf(stderr,
+            "TEST %d FAILED:                             \n" // test_n
+            "square_solver(%lg, %lg, %lg, ...) ->\n" // kf_a, kf_b, kf_c
+            "\t-> n_roots = %d, x1 = %lf, x2 = %lf       \n" // n_r, x1, x2
+            "(should be %d, %lf, %lf)                    \n", // ref n_r, ref x1, ref x2
+            test_data->ss_test_n,
+            test_data->ss_kf_a, test_data->ss_kf_b, test_data->ss_kf_c,
+            n_roots, eq.ans1, eq.ans2,
+            test_data->ss_reference_nRoots, test_data->ss_reference_ans1, test_data->ss_reference_ans1
+        );
+    return is_failed;
+}
+
 int TEST_square_solver(int * const count_tests) {
     /*
-    (1, -3, 2) -> TWO, 1, 2
-    (1, 2, 0) -> TWO, 0, -2
-    (1, 0, 0) -> ONE, 0
-    (1, 2, 1) -> ONE, -1
-    (0, 2, 0) -> ONE, 0
-    (0, 2, 5) -> ONE, -2.5
-    (1, 0, 2) -> NO
-    (0, 0, 2) -> NO
-    (0, 0, -5) -> NO
-    (0, 0, 0) -> INF
+    #1 (1, -3, 2) -> TWO, 1, 2
+    #2 (1, 2, 0) -> TWO, 0, -2
+    #3 (1, 0, 0) -> ONE, 0
+    #4 (1, 2, 1) -> ONE, -1
+    #5 (0, 2, 0) -> ONE, 0
+    #6 (0, 2, 5) -> ONE, -2.5
+    #7 (1, 0, 2) -> NO
+    #8 (0, 0, 2) -> NO
+    #9 (0, 0, -5) -> NO
+    #10(0, 0, 0) -> INF
     */
+    int is_failed = 0;
 
-    int is_passed = 0;
-
-    // ------------ TEST 1 -------------
-    // (1, -3, 2) -> TWO, 1, 2
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 1,
-        .kf_b   = -3,
-        .kf_c   = 2,
-        .ans1   = NAN,
-        .ans2   = NAN,
+    struct TEST_DATA_square_solver tests[] = {
+        {
+            .ss_test_n           = 1,
+            .ss_kf_a             = 1,
+            .ss_kf_b             = -3,
+            .ss_kf_c             = 2,
+            .ss_reference_nRoots = TWO,
+            .ss_reference_ans1   = 1,
+            .ss_reference_ans2   = 2,
+        },
+        {
+            .ss_test_n           = 2,
+            .ss_kf_a             = 1,
+            .ss_kf_b             = 2,
+            .ss_kf_c             = 0,
+            .ss_reference_nRoots = TWO,
+            .ss_reference_ans1   = 0,
+            .ss_reference_ans2   = -2,
+        },
+        {
+            .ss_test_n           = 3,
+            .ss_kf_a             = 1,
+            .ss_kf_b             = 0,
+            .ss_kf_c             = 0,
+            .ss_reference_nRoots = ONE,
+            .ss_reference_ans1   = 0,
+            .ss_reference_ans2   = 0,
+        },
+        {
+            .ss_test_n           = 4,
+            .ss_kf_a             = 1,
+            .ss_kf_b             = 2,
+            .ss_kf_c             = 1,
+            .ss_reference_nRoots = ONE,
+            .ss_reference_ans1   = -1,
+            .ss_reference_ans2   = -1,
+        },
+        {
+            .ss_test_n           = 5,
+            .ss_kf_a             = 0,
+            .ss_kf_b             = 2,
+            .ss_kf_c             = 0,
+            .ss_reference_nRoots = ONE,
+            .ss_reference_ans1   = 0,
+            .ss_reference_ans2   = 0,
+        },
+        {
+            .ss_test_n           = 6,
+            .ss_kf_a             = 0,
+            .ss_kf_b             = 2,
+            .ss_kf_c             = 5,
+            .ss_reference_nRoots = ONE,
+            .ss_reference_ans1   = -2.5,
+            .ss_reference_ans2   = -2.5,
+        },
+        {
+            .ss_test_n           = 7,
+            .ss_kf_a             = 1,
+            .ss_kf_b             = 0,
+            .ss_kf_c             = 2,
+            .ss_reference_nRoots = NO,
+            .ss_reference_ans1   = NAN,
+            .ss_reference_ans2   = NAN,
+        },
+        {
+            .ss_test_n           = 8,
+            .ss_kf_a             = 0,
+            .ss_kf_b             = 0,
+            .ss_kf_c             = 2,
+            .ss_reference_nRoots = NO,
+            .ss_reference_ans1   = NAN,
+            .ss_reference_ans2   = NAN,
+        },
+        {
+            .ss_test_n           = 9,
+            .ss_kf_a             = 0,
+            .ss_kf_b             = 0,
+            .ss_kf_c             = -5,
+            .ss_reference_nRoots = NO,
+            .ss_reference_ans1   = NAN,
+            .ss_reference_ans2   = NAN,
+        },
+        {
+            .ss_test_n           = 10,
+            .ss_kf_a             = 0,
+            .ss_kf_b             = 0,
+            .ss_kf_c             = 0,
+            .ss_reference_nRoots = INF,
+            .ss_reference_ans1   = NAN,
+            .ss_reference_ans2   = NAN,
+        },
     };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == TWO &&
-        eq.status == SOLVED_TWO && (
-        (compare_double(eq.ans1, 1) == 0 && compare_double(eq.ans2, 2) == 0) ||
-        (compare_double(eq.ans2, 1) == 0 && compare_double(eq.ans1, 2) == 0))
-        )
-    ) {
-        printf("TEST 1 FAILED:\n"
-               "square_solver(1, -3, 2, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be TWO, SOLVED_TWO, 1, 2)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
+
+    int n = sizeof(tests) / sizeof(tests[0]);
+    for (int i = 0; i<n; ++i) {
+        int test_failed = ONE_TEST_square_solver(&tests[i]);
+        if (!(test_failed))
+            ++*count_tests;
+        is_failed |= test_failed;
     }
 
-    // ------------ TEST 2 -------------
-    // (1, 2, 0) -> TWO, 0, -2
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 1,
-        .kf_b   = 2,
-        .kf_c   = 0,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == TWO &&
-        eq.status == SOLVED_TWO && (
-        (compare_double(eq.ans1, 0) == 0 && compare_double(eq.ans2, -2) == 0) ||
-        (compare_double(eq.ans2, 0) == 0 && compare_double(eq.ans1, -2) == 0))
-        )
-    ) {
-        printf("TEST 2 FAILED:\n"
-               "square_solver(1, 2, 0, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be TWO, SOLVED_TWO, 0, -2)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 3 -------------
-    // (1, 0, 0) -> ONE, 0
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 1,
-        .kf_b   = 0,
-        .kf_c   = 0,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == ONE &&
-        eq.status == SOLVED_ONE &&
-        compare_double(eq.ans1, 0) == 0
-        )
-    ) {
-        printf("TEST 3 FAILED:\n"
-               "square_solver(1, 0, 0, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be ONE, SOLVED_ONE, 0)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 4 -------------
-    // (1, 2, 1) -> ONE, -1
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 1,
-        .kf_b   = 2,
-        .kf_c   = 1,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == ONE &&
-        eq.status == SOLVED_ONE &&
-        compare_double(eq.ans1, -1) == 0
-        )
-    ) {
-        printf("TEST 4 FAILED:\n"
-               "square_solver(1, 2, 1, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be ONE, SOLVED_ONE, -1)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 5 -------------
-    // (0, 2, 0) -> ONE, 0
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 0,
-        .kf_b   = 2,
-        .kf_c   = 0,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == ONE &&
-        eq.status == SOLVED_ONE &&
-        compare_double(eq.ans1, 0) == 0
-        )
-    ) {
-        printf("TEST 5 FAILED:\n"
-               "square_solver(0, 2, 0, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be ONE, SOLVED_ONE, 0)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 6 -------------
-    // (0, 2, 5) -> ONE, -2.5
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 0,
-        .kf_b   = 2,
-        .kf_c   = 5,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == ONE &&
-        eq.status == SOLVED_ONE &&
-        compare_double(eq.ans1, -2.5) == 0
-        )
-    ) {
-        printf("TEST 6 FAILED:\n"
-               "square_solver(0, 2, 5, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be ONE, SOLVED_ONE, -2.5)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 7 -------------
-    // (1, 0, 2) -> NO
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 1,
-        .kf_b   = 0,
-        .kf_c   = 2,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == NO &&
-        eq.status == SOLVED_NO
-        )
-    ) {
-        printf("TEST 7 FAILED:\n"
-               "square_solver(1, 0, 2, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be NO, SOLVED_NO)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 8 -------------
-    // (0, 0, 2) -> NO
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 0,
-        .kf_b   = 0,
-        .kf_c   = 2,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == NO &&
-        eq.status == SOLVED_NO
-        )
-    ) {
-        printf("TEST 8 FAILED:\n"
-               "square_solver(0, 0, 2, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be NO, SOLVED_NO)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 9 -------------
-    // (0, 0, -5) -> NO
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 0,
-        .kf_b   = 0,
-        .kf_c   = -5,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == NO &&
-        eq.status == SOLVED_NO
-        )
-    ) {
-        printf("TEST 9 FAILED:\n"
-               "square_solver(0, 0, -5, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be NO, SOLVED_NO)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    // ------------ TEST 10 -------------
-    // (0, 0, 0) -> INF
-    {
-    struct square_equation eq = {
-        .status = NOT_SOLVE,
-        .kf_a   = 0,
-        .kf_b   = 0,
-        .kf_c   = 0,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-    enum solutions_count n_roots = square_solver(&eq);
-    if (!
-        (
-        n_roots == INF &&
-        eq.status == SOLVED_INF
-        )
-    ) {
-        printf("TEST 10 FAILED:\n"
-               "square_solver(0, 0, 0, ...) -> n_roots = %d, status = %d, ans1 = %lf, ans2 = %lf\n"
-               "(should be INF, SOLVED_INF)",
-               n_roots, eq.status, eq.ans1, eq.ans2);
-        is_passed = -1;
-    }
-    else
-        ++*count_tests;
-    }
-
-    return is_passed;
+    return is_failed;
 }
 

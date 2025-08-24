@@ -11,7 +11,7 @@
 #include "real_number_utils.h"
 #include "real_number_utils_tests.h"
 
-//TODO: option selfcheck help (getopt)
+//TODO: colored output
 
 int selfcheck() {
     int test_passed = 0;
