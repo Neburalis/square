@@ -23,9 +23,11 @@ struct square_equation {
 
 enum solutions_count square_solver(struct square_equation * const eq);
 
-void input_square_koef(struct square_equation * const eq);
+void quiet_input_square_koef(struct square_equation * const eq);
+void pretty_input_square_koef(struct square_equation * const eq);
 
-int output_square_solver_result(struct square_equation * const eq);
+int quiet_output_square_solver_result(struct square_equation * const eq);
+int pretty_output_square_solver_result(struct square_equation * const eq);
 
 int square_equation_minus_zero_fix(struct square_equation * const eq);
 
