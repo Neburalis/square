@@ -16,37 +16,52 @@ enum solutions_count square_solver(struct square_equation * const eq) {
     if (!is_zero(a)) {
         double x1 = NAN, x2 = NAN;
         enum solutions_count n_solutions = solve_square_equation(a, b, c, &x1, &x2);
-        if (n_solutions == NO) {
-            eq->status = SOLVED_NO;
-            return NO;
-        }
-        else if (n_solutions == ONE) {
-            eq->status = SOLVED_ONE;
-            eq->ans1 = eq->ans2 = x1;
-            return ONE;
-        }
-        else { // if (n_solutions == TWO) {
-            eq->status = SOLVED_TWO;
-            eq->ans1 = x1;
-            eq->ans2 = x2;
-            return TWO;
+        switch (n_solutions){
+            case NO:
+                eq->status = SOLVED_NO;
+                return NO;
+            case ONE:
+                eq->status = SOLVED_ONE;
+                eq->ans1 = eq->ans2 = x1;
+                return ONE;
+            case TWO:
+                eq->status = SOLVED_TWO;
+                eq->ans1 = x1;
+                eq->ans2 = x2;
+                return TWO;
+            case INF:
+                eq->status = SOLUTION_ERR;
+                return ERR;
+            case ERR:
+                eq->status = SOLUTION_ERR;
+                return ERR;
+            default:
+                eq->status = SOLUTION_ERR;
+                return ERR;
         }
     }
     else {
         double x = NAN;
         enum solutions_count n_solutions = solve_linear_equation(b, c, &x);
-        if (n_solutions == ONE){
-            eq->status = SOLVED_ONE;
-            eq->ans1 = eq->ans2 = x;
-            return ONE;
-        }
-        else if (n_solutions == NO){
-            eq->status = SOLVED_NO;
-            return NO;
-        }
-        else { // if (n_solutions == INF){
-            eq->status = SOLVED_INF;
-            return INF;
+        switch (n_solutions) {
+            case NO:
+                eq->status = SOLVED_NO;
+                return NO;
+            case ONE:
+                eq->status = SOLVED_ONE;
+                eq->ans1 = eq->ans2 = x;
+                return ONE;
+            case INF:
+                eq->status = SOLVED_INF;
+                return INF;
+            case TWO:
+                eq->status = SOLUTION_ERR;
+                return ERR;
+            case ERR:
+                eq->status = SOLUTION_ERR;
+                return ERR;
+            default:
+                return ERR;
         }
     }
 }
@@ -114,6 +129,9 @@ int quiet_output_square_solver_result(struct square_equation * const eq) {
         case NOT_SOLVE:
             // printf("ERROR: equation has not been solved yet.\n");
             return 1;
+        case SOLUTION_ERR:
+            //
+            return 1;
         default:
             // printf("ERROR: unexpected value in n_solutions, n_solutions = %d\n", eq->status);
             return 1; // todo return enum
@@ -164,6 +182,9 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             return 1;
         case NOT_SOLVE:
             printf("ERROR: equation has not been solved yet.\n");
+            return 1;
+        case SOLUTION_ERR:
+            // ...
             return 1;
         default:
             printf("ERROR: unexpected value in n_solutions, n_solutions = %d\n", eq->status);

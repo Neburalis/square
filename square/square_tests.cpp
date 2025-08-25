@@ -9,12 +9,9 @@
 
 struct TEST_DATA_square_solver {
     uint16_t ss_test_n;
-    double ss_kf_a;
-    double ss_kf_b;
-    double ss_kf_c;
+    double ss_kf_a, ss_kf_b, ss_kf_c;
     enum solutions_count ss_reference_nRoots;
-    double ss_reference_ans1;
-    double ss_reference_ans2;
+    double ss_reference_ans1, ss_reference_ans2;
 };
 
 static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_data) {
@@ -47,6 +44,7 @@ static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_da
                       (compare_double(eq.ans2, test_data->ss_reference_ans1) == 0 && compare_double(eq.ans1, test_data->ss_reference_ans2) == 0)))
                     is_failed = 1;
                 break;
+            case ERR:
             default:
                 is_failed = 2;
                 break;
@@ -178,8 +176,8 @@ int TEST_square_solver(int * const count_tests) {
         },
     };
 
-    int n = sizeof(tests) / sizeof(tests[0]);
-    for (int i = 0; i<n; ++i) {
+    size_t n = sizeof(tests) / sizeof(tests[0]);
+    for (size_t i = 0; i<n; ++i) {
         int test_failed = ONE_TEST_square_solver(&tests[i]);
         if (!(test_failed))
             ++*count_tests;

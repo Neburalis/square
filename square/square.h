@@ -4,21 +4,19 @@
 #include "../math_equation_solver/math_equation_solver.h"
 
 enum ss_status {
-    NOT_INPUT  = -3,
-    NOT_SOLVE  = -2,
-    SOLVED_INF = -1,
-    SOLVED_NO  = 0,
-    SOLVED_ONE = 1,
-    SOLVED_TWO = 2,
+    NOT_INPUT    = -3,
+    NOT_SOLVE    = -2,
+    SOLVED_INF   = -1,
+    SOLVED_NO    = 0,
+    SOLVED_ONE   = 1,
+    SOLVED_TWO   = 2,
+    SOLUTION_ERR = -42,
 };
 
 struct square_equation {
     enum ss_status status;
-    double kf_a;
-    double kf_b;
-    double kf_c;
-    double ans1;
-    double ans2;
+    double kf_a, kf_b, kf_c;
+    double ans1, ans2;
 };
 
 enum solutions_count square_solver(struct square_equation * const eq);

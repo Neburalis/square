@@ -2,19 +2,16 @@
 #include <math.h>
 
 #include "math_equation_solver.h"
-#include "../real_number_utils/real_number_utils.h"
+#include "real_number_utils.h"
 
 struct TEST_DATA_solve_square_equation {
     uint16_t ss_test_n;
-    double ss_kf_a;
-    double ss_kf_b;
-    double ss_kf_c;
+    double ss_kf_a, ss_kf_b, ss_kf_c;
     enum solutions_count ss_reference_nRoots;
-    double ss_reference_ans1;
-    double ss_reference_ans2;
+    double ss_reference_ans1, ss_reference_ans2;
 };
 
-static int ONE_TEST_solve_square_equation(struct TEST_DATA_solve_square_equation const * test_data) {
+static int ONE_TEST_solve_square_equation(const TEST_DATA_solve_square_equation * const test_data) {
     double x1 = NAN, x2 = NAN;
     int is_failed = 0;
 
@@ -36,6 +33,7 @@ static int ONE_TEST_solve_square_equation(struct TEST_DATA_solve_square_equation
                       (compare_double(x2, test_data->ss_reference_ans1) == 0 && compare_double(x1, test_data->ss_reference_ans2) == 0)))
                     is_failed = 1;
                 break;
+            case ERR:
             default:
                 is_failed = 2;
                 break;
@@ -118,8 +116,8 @@ int TEST_solve_square_equation(int * const count_tests) {
         },
     };
 
-    int n = sizeof(tests) / sizeof(tests[0]);
-    for (int i = 0; i<n; ++i) {
+    size_t n = sizeof(tests) / sizeof(tests[0]);
+    for (size_t i = 0; i<n; ++i) {
         int test_failed = ONE_TEST_solve_square_equation(&tests[i]);
         if (!(test_failed))
             ++*count_tests;
@@ -131,13 +129,12 @@ int TEST_solve_square_equation(int * const count_tests) {
 
 struct TEST_DATA_solve_linear_equation {
     uint16_t ss_test_n;
-    double ss_kf_a;
-    double ss_kf_b;
+    double ss_kf_a, ss_kf_b;
     enum solutions_count ss_reference_nRoots;
     double ss_reference_ans;
 };
 
-static int ONE_TEST_solve_linear_equation(struct TEST_DATA_solve_linear_equation const * test_data) {
+static int ONE_TEST_solve_linear_equation(const TEST_DATA_solve_linear_equation * const test_data) {
     double x = NAN;
     int is_failed = 0;
 
@@ -157,6 +154,7 @@ static int ONE_TEST_solve_linear_equation(struct TEST_DATA_solve_linear_equation
             case TWO:
                 is_failed = 1;
                 break;
+            case ERR:
             default:
                 is_failed = 2;
                 break;
@@ -229,8 +227,8 @@ int TEST_solve_linear_equation(int * const count_tests) {
         },
     };
 
-    int n = sizeof(tests) / sizeof(tests[0]);
-    for (int i = 0; i<n; ++i) {
+    size_t n = sizeof(tests) / sizeof(tests[0]);
+    for (size_t i = 0; i<n; ++i) {
         int test_failed = ONE_TEST_solve_linear_equation(&tests[i]);
         if (!(test_failed))
             ++*count_tests;

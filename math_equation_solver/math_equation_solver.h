@@ -6,6 +6,7 @@ enum solutions_count {
     ONE = 1,
     TWO = 2,
     INF = -1,
+    ERR = -42,
 };
 
 enum solutions_count solve_square_equation(double a, double b, double c,
