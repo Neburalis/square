@@ -28,7 +28,7 @@ enum solutions_count solve_square_equation(double a, double b, double c,
     double d = b * b - 4 * a * c;
 
     if (!isfinite(d)){
-        // ERROR_MSG(CYAN("message:") " %s\n", "результат вычисления дискриминанта некорректен (возможно, переполнение или несогласованные данные).");
+        ERROR_MSG(CYAN("message:") " %s\n", "результат вычисления дискриминанта некорректен (возможно, переполнение или несогласованные данные).");
         return ERR;
     }
 

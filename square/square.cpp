@@ -6,6 +6,7 @@
 
 #include "io_utils.h"
 #include "real_number_utils.h"
+#include "../macro.h"
 
 enum solutions_count square_solver(struct square_equation * const eq) {
     assert(eq != NULL);
@@ -78,7 +79,7 @@ void quiet_input_square_koef(struct square_equation * const eq) {
 void pretty_input_square_koef(struct square_equation * const eq) {
     assert(eq != NULL);
 
-    printf(
+    printf(CYAN(
         " ____                                                  \n"
         "/ ___|   __ _  _   _   __ _  _ __  ___                 \n"
         "\\___ \\  / _` || | | | / _` || '__|/ _ \\             \n"
@@ -92,7 +93,7 @@ void pretty_input_square_koef(struct square_equation * const eq) {
         "/ __| / _ \\ | |\\ \\ / // _ \\| '__|                  \n"
         "\\__ \\| (_) || | \\ V /|  __/| |                      \n"
         "|___/ \\___/ |_|  \\_/  \\___||_|                      \n\n"
-    );
+    ));
     printf("🧮 Программа для решения квадратного уравнения ax^2 + bx + c = 0\n"
             "📝 Введите коэффициенты a, b и c каждый в новой строке.\n");
 
