@@ -28,12 +28,12 @@ double safe_get_double(const char * const var_name) {
     for (;;) {
         printf("%s", var_name);
         scanf_status = scanf("%lg", &var);
-        if (scanf_status && !isinf(var) && is_stdin_buffer_clean())
+        if (scanf_status && !isinf(var) && isfinite(var) && is_stdin_buffer_clean())
             return var;
         clear_stdin_buffer();
-        printf("😢 Вы ввели число, которое я не смог распознать. "
+        printf("😢 Вы ввели число, которое я не смог распознать.     "
                "Попробуйте ввести правильное число (например 12.34). "
-               "Десятичный разделитель точка (.).\n");
+               "Десятичный разделитель точка (.).\n                  ");
     }
 }
 
