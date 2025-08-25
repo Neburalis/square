@@ -3,7 +3,8 @@
 #include <stdio.h>
 
 #include "math_equation_solver.h"
-#include "../real_number_utils/real_number_utils.h"
+#include "real_number_utils.h"
+#include "../macro.h"
 
 // enum solutions_count {
 //     NO  = 0,
@@ -25,15 +26,27 @@ enum solutions_count solve_square_equation(double a, double b, double c,
     assert(!is_zero(a));
 
     double d = b * b - 4 * a * c;
-    if (d > 0) {
+
+    if (!isfinite(d)){
+        // ERROR_MSG(CYAN("message:") " %s\n", "результат вычисления дискриминанта некорректен (возможно, переполнение или несогласованные данные).");
+        return ERR;
+    }
+
+    // printf("%lg\n", d);
+
+    if (is_zero(d)) {
+        *x1 = *x2 = -b / (2*a);
+        return ONE;
+    }
+    else if (d > 0) {
         double sqrt_d = sqrt(d);
         *x1 = ( -b + sqrt_d) / (2*a);
         *x2 = ( -b - sqrt_d) / (2*a);
+        if (compare_double(*x1, *x2) == 0){
+            *x1 = *x2 = -b / (2*a);
+            return ONE;
+        }
         return TWO;
-    }
-    else if (is_zero(d)) {
-        *x1 = *x2 = -b / (2*a);
-        return ONE;
     }
     else { //if (d < 0)
         return NO;

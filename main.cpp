@@ -10,6 +10,7 @@
 #include "math_equation_solver_tests.h"
 #include "real_number_utils.h"
 #include "real_number_utils_tests.h"
+#include "macro.h"
 
 //TODO: colored output
 
@@ -24,11 +25,11 @@ int selfcheck() {
     is_failed |= TEST_minus_zero_fix(&test_passed);
     is_failed |= TEST_square_solver(&test_passed);
     if (!is_failed) {
-        printf("PASSED %d TESTS\n", test_passed);
+        printf(GREEN("PASSED %d TESTS\n"), test_passed);
         return 0;
     }
     else {
-        fprintf(stderr, "FAILED\n");
+        fprintf(stderr, RED("FAILED\n"));
         return 1;
     }
 }
