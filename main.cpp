@@ -12,8 +12,6 @@
 #include "real_number_utils_tests.h"
 #include "macro.h"
 
-//TODO: colored output
-
 int selfcheck() {
     int test_passed = 0;
     printf("Selfcheck ...\n");
@@ -78,6 +76,8 @@ int quiet_work() {
 }
 
 int main(int argc, char * argv[]) {
+    printf("МЯУ\n");
+
     int rez = 0;
 
     while ( (rez = getopt(argc, argv, "chq")) != -1){
@@ -108,8 +108,18 @@ int main(int argc, char * argv[]) {
 
     if (argc == 1) {
         int status = default_work();
-        if (!status)
+        if (status) {
+            ERROR_MSG(CYAN("returned value: %d"), status);
             return status;
+        }
     }
+
+    printf(CYAN("\n"
+        " _   _       _             _                                   _ _      ____ ___ _____ _   _ _   _ ____           \n"
+        "| | | |   __| | ___  _ __ | |_    ___ ___  _ __ ___  _ __ ___ (_) |_   / ___|_ _|_   _| | | | | | | __ )          \n"
+        "| | | |  / _` |/ _ \\| '_ \\| __|  / __/ _ \\| '_ ` _ \\| '_ ` _ \\| | __| | |  _ | |  | | | |_| | | | |  _ \\    \n"
+        "| |_| | | (_| | (_) | | | | |_  | (_| (_) | | | | | | | | | | | | |_  | |_| || |  | | |  _  | |_| | |_) |         \n"
+        " \\___/   \\__,_|\\___/|_| |_|\\__|  \\___\\___/|_| |_| |_|_| |_| |_|_|\\__|  \\____|___| |_| |_| |_|\\___/|____/ \n\n"
+    ));
     return 0;
 }
