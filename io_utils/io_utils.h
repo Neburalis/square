@@ -27,6 +27,7 @@ int msleep(long msec);
 
 void spinner(string_t str, uint32_t time, uint32_t period);
 
+long long lines_in_file(FILE *fp);
 /**
   @brief Функция отчистки буфера ввода
   Считывает данные из потока ввода до \\n (\n также будет считан)

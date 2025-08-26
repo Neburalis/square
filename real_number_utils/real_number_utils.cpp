@@ -13,13 +13,13 @@ int is_zero(double var) {
     return 0;
 }
 
-int compare_double(double a, double b) {
-    assert(isfinite(a) && "a must be finite");
-    assert(isfinite(b) && "b must be finite");
+int compare_double(double first, double second) {
+    assert(isfinite(first) && "first must be finite");
+    assert(isfinite(second) && "second must be finite");
 
-    if (fabs(a - b) < MIN_TOLERANCE)
+    if (fabs(first - second) < MIN_TOLERANCE)
         return 0;
-    else if (a > b)
+    else if (first > second)
         return 1;
     // else if (b < a)
     return -1;

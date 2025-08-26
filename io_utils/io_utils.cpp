@@ -36,6 +36,30 @@ void spinner(string_t str, uint32_t time, uint32_t period) {
     }
 }
 
+long long lines_in_file(FILE *fp) {
+    if (!fp){
+        errno = EBADF;
+        return -1;
+    }
+
+    long long lines = 1;
+    char ch = 0;
+
+    while(!feof(fp)) {
+        ch = fgetc(fp);
+        if(ch == '\n')
+        {
+            ++lines;
+        }
+    }
+
+    if (fseek(fp, 0, SEEK_SET)) {
+        errno = EBADF;
+        return -1;
+    }
+    return lines;
+}
+
 int clear_stdin_buffer() {
     while (getchar() != '\n')
         continue;
@@ -73,6 +97,7 @@ int is_user_want_continue(const char * const ask_message) {
     int choice = 0;
 
     printf("%s", ask_message);
+    fflush(stdout);
 
     do {
         choice = getchar();

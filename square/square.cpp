@@ -142,8 +142,9 @@ int quiet_output_square_solver_result(struct square_equation * const eq) {
 int pretty_output_square_solver_result(struct square_equation * const eq) {
     assert(eq != NULL);
 
-    printf("\nИщу корни квадратного уравнения\n");
-    spinner("Ведутся раскопки ", 2500, 150);
+    printf("\n");
+    spinner("Ведутся раскопки ", 1000, 150);
+    printf("Нашел корни квадратного уравнения:\n");
 
     switch (eq->status) {
         case SOLVED_TWO:
