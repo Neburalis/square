@@ -27,7 +27,7 @@ int msleep(long msec) {
 
 void spinner(string_t str, uint32_t time, uint32_t period) {
     const char pp[] = {'-', '\\', '|', '/'};
-    for (uint32_t i = 0; i < (int) time/period; ++i) {
+    for (uint32_t i = 0; i < (uint32_t) time/period; ++i) {
         printf("%s", str);
         fflush(stdout);
         printf("%c", pp[i%4]); // - \ | /
@@ -36,14 +36,14 @@ void spinner(string_t str, uint32_t time, uint32_t period) {
     }
 }
 
-long long lines_in_file(FILE *fp) {
+size_t lines_in_file(FILE *fp) {
     if (!fp){
         errno = EBADF;
-        return -1;
+        return 0;
     }
 
     long long lines = 1;
-    char ch = 0;
+    int ch = 0;
 
     while(!feof(fp)) {
         ch = fgetc(fp);
@@ -55,7 +55,7 @@ long long lines_in_file(FILE *fp) {
 
     if (fseek(fp, 0, SEEK_SET)) {
         errno = EBADF;
-        return -1;
+        return 0;
     }
     return lines;
 }

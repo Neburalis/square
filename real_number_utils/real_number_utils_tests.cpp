@@ -41,7 +41,7 @@ int TEST_is_zero(FILE* fp, uint32_t * const count_tests) {
         errno = EBADF;
         return -1;
     }
-    long long line_num = lines_in_file(fp);
+    size_t line_num = lines_in_file(fp);
     int is_failed = 0;
 
     struct TEST_DATA_is_zero * tests =
@@ -94,7 +94,7 @@ static int ONE_TEST_compare_double(const TEST_DATA_compare_double * const test_d
 
     if (!((ans = compare_double(test_data->first, test_data->second)) == test_data->reference_output)) {
         fprintf(stderr, RED("TEST %u FAILED:\n")
-               "compare_double(%lf, $lf) -> ans = %d\n"
+               "compare_double(%lf, %lf) -> ans = %d\n"
                "(should be %d)\n\n",
                test_data->test_n, test_data->first, test_data->second, ans, test_data->reference_output);
         is_failed = 1;
@@ -117,7 +117,7 @@ int TEST_compare_double(FILE* fp, uint32_t * const count_tests) {
         errno = EBADF;
         return -1;
     }
-    long long line_num = lines_in_file(fp);
+    size_t line_num = lines_in_file(fp);
     int is_failed = 0;
 
     struct TEST_DATA_compare_double * tests =
@@ -172,7 +172,7 @@ static int ONE_TEST_minus_zero_fix(const TEST_DATA_minus_zero_fix * const test_d
         ((ans = minus_zero_fix(&var)) == test_data->reference_output) && (compare_double(var, test_data->reference_value) == 0)
         )) {
         fprintf(stderr, RED("TEST %u FAILED:\n")
-               "minus_zero_fix(#ld) -> ans = %d\n, x = %lf"
+               "minus_zero_fix(%lf) -> ans = %d\n, x = %lf"
                "(should be %d, %lf)",
                test_data->test_n, test_data->value, ans, var, test_data->reference_output, test_data->reference_value);
         is_failed = 1;
@@ -191,7 +191,7 @@ int TEST_minus_zero_fix(FILE* fp, uint32_t * const count_tests) {
         errno = EBADF;
         return -1;
     }
-    long long line_num = lines_in_file(fp);
+    size_t line_num = lines_in_file(fp);
     int is_failed = 0;
 
     struct TEST_DATA_minus_zero_fix * tests =

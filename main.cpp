@@ -110,8 +110,8 @@ int main(int argc, char * argv[]) {
 		switch (rez) {
 		case 'c':
             if (selfcheck()) {
-                printf("SELFCHECK FAILED. See stderr to view problem.\n");
-                abort();
+                printf(BOLD(RED("SELFCHECK FAILED. See stderr to view problem.\n")));
+                return -1;
             }
             break;
 		case 'h':

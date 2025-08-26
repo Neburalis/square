@@ -15,7 +15,6 @@ struct TEST_DATA_square_solver {
     enum solutions_count ss_reference_nRoots;
     double ss_reference_ans1, ss_reference_ans2;
 };
-
 static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_data) {
     int is_failed = 0;
 
@@ -58,7 +57,7 @@ static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_da
 
     if (is_failed)
         fprintf(stderr,
-            RED("TEST %d FAILED:\n") // test_n
+            RED("TEST %u FAILED:\n") // test_n
             "square_solver(%lg, %lg, %lg, ...) ->\n" // kf_a, kf_b, kf_c
             "\t-> n_roots = %d, x1 = %lf, x2 = %lf       \n" // n_r, x1, x2
             "(should be %d, %lf, %lf)                  \n\n", // ref n_r, ref x1, ref x2
@@ -69,7 +68,6 @@ static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_da
         );
     return is_failed;
 }
-
 int TEST_square_solver(FILE *fp, uint32_t * const count_tests) {
     /*
     #1 (1, -3, 2) -> TWO, 1, 2
@@ -87,7 +85,7 @@ int TEST_square_solver(FILE *fp, uint32_t * const count_tests) {
         errno = EBADF;
         return -1;
     }
-    long long line_num = lines_in_file(fp);
+    size_t line_num = lines_in_file(fp);
     int is_failed = 0;
 
     struct TEST_DATA_square_solver * tests =
@@ -100,7 +98,7 @@ int TEST_square_solver(FILE *fp, uint32_t * const count_tests) {
             uint32_t num = 0;
             double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
             int n_roots = 0;
-            if (fscanf(fp, "#%d (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
+            if (fscanf(fp, "#%u (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
 
                 tests[i] = {
                     .ss_test_n = num,

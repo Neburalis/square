@@ -47,7 +47,7 @@ static int ONE_TEST_solve_square_equation(const TEST_DATA_solve_square_equation 
 
     if (is_failed)
         fprintf(stderr,
-            RED("TEST %d FAILED:                         \n") // test_n
+            RED("TEST %u FAILED:                         \n") // test_n
             "solve_square_equation(%lg, %lg, %lg, ...) ->\n" // kf_a, kf_b, kf_c
             "\t-> n_roots = %d, x1 = %lf, x2 = %lf       \n" // n_r, x1, x2
             "(should be %d, %lf, %lf)                  \n\n", // ref n_r, ref x1, ref x2
@@ -70,7 +70,7 @@ int TEST_solve_square_equation(FILE *fp, uint32_t * const count_tests) {
         errno = EBADF;
         return -1;
     }
-    long long line_num = lines_in_file(fp);
+    size_t line_num = lines_in_file(fp);
     int is_failed = 0;
 
     struct TEST_DATA_solve_square_equation *tests =
@@ -87,7 +87,7 @@ int TEST_solve_square_equation(FILE *fp, uint32_t * const count_tests) {
     for(int i = 0;;++i) {
         double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
         int n_roots = 0;
-        if (fscanf(fp, "#%d (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
+        if (fscanf(fp, "#%u (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
 
             tests[i] = {
                 .ss_test_n = num,
@@ -151,7 +151,7 @@ static int ONE_TEST_solve_linear_equation(const TEST_DATA_solve_linear_equation 
 
     if (is_failed)
         fprintf(stderr,
-            RED("TEST %d FAILED:                        \n") // test_n
+            RED("TEST %u FAILED:                        \n") // test_n
             "solve_linear_equation(%lg, %lg, ...) ->    \n" // kf_a, kf_b
             "\t-> n_roots = %d, x = %lf                 \n" // n_r, x
             "(should be %d, %lf)                      \n\n", // ref n_r, ref x
@@ -174,7 +174,7 @@ int TEST_solve_linear_equation(FILE *fp, uint32_t * const count_tests) {
         errno = EBADF;
         return -1;
     }
-    long long line_num = lines_in_file(fp);
+    size_t line_num = lines_in_file(fp);
     int is_failed = 0;
 
     struct TEST_DATA_solve_linear_equation *tests =
@@ -191,7 +191,7 @@ int TEST_solve_linear_equation(FILE *fp, uint32_t * const count_tests) {
         for(int i = 0;;++i) {
             double a = 0, b = 0, x = 0;
             int n_roots = 0;
-            if (fscanf(fp, "#%d (%lf, %lf) -> %d, %lf", &num, &a, &b, &n_roots, &x) == 5){
+            if (fscanf(fp, "#%u (%lf, %lf) -> %d, %lf", &num, &a, &b, &n_roots, &x) == 5){
                 tests[i] = {
                     .ss_test_n = num,
                     .ss_kf_a = a, .ss_kf_b = b,
