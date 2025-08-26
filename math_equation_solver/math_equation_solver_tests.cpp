@@ -3,9 +3,10 @@
 
 #include "math_equation_solver.h"
 #include "real_number_utils.h"
+#include "../macro.h"
 
 struct TEST_DATA_solve_square_equation {
-    uint16_t ss_test_n;
+    uint32_t ss_test_n;
     double ss_kf_a, ss_kf_b, ss_kf_c;
     enum solutions_count ss_reference_nRoots;
     double ss_reference_ans1, ss_reference_ans2;
@@ -45,10 +46,10 @@ static int ONE_TEST_solve_square_equation(const TEST_DATA_solve_square_equation 
 
     if (is_failed)
         fprintf(stderr,
-            "TEST %d FAILED:                             \n" // test_n
+            RED("TEST %d FAILED:                         \n") // test_n
             "solve_square_equation(%lg, %lg, %lg, ...) ->\n" // kf_a, kf_b, kf_c
             "\t-> n_roots = %d, x1 = %lf, x2 = %lf       \n" // n_r, x1, x2
-            "(should be %d, %lf, %lf)                    \n", // ref n_r, ref x1, ref x2
+            "(should be %d, %lf, %lf)                  \n\n", // ref n_r, ref x1, ref x2
             test_data->ss_test_n,
             test_data->ss_kf_a, test_data->ss_kf_b, test_data->ss_kf_c,
             n_roots, x1, x2,
@@ -65,16 +66,19 @@ int TEST_solve_square_equation(int * const count_tests) {
     (1, 2, 1) -> ONE, -1
     (1, 0, 2) -> NO
     */
-    FILE *fp = fopen("math_equation_solver/solve_square_equation_test_data.txt", "r");
-    struct TEST_DATA_solve_square_equation tests[100];
+    FILE *fp = fopen("test/solve_square_equation_test_data.txt", "r");
+//     if (!fp){
+//
+//     }
+    struct TEST_DATA_solve_square_equation tests[100] = {};
     size_t test_count = 0;
 
-    uint16_t num = 0;
+    uint32_t num = 0;
     if (fp) {
         for(int i = 0;;++i) {
             double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
             int n_roots = 0;
-            if (fscanf(fp, "#%hd (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2)){
+            if (fscanf(fp, "#%d (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
                 // printf("#%hd (%lf, %lf, %lf) -> %d, %lf, %lf\n", num, a, b, c, n_roots, x1, x2);
 
                 tests[i] = {
@@ -153,7 +157,7 @@ int TEST_solve_square_equation(int * const count_tests) {
 }
 
 struct TEST_DATA_solve_linear_equation {
-    uint16_t ss_test_n;
+    uint32_t ss_test_n;
     double ss_kf_a, ss_kf_b;
     enum solutions_count ss_reference_nRoots;
     double ss_reference_ans;
@@ -191,10 +195,10 @@ static int ONE_TEST_solve_linear_equation(const TEST_DATA_solve_linear_equation 
 
     if (is_failed)
         fprintf(stderr,
-            "TEST %d FAILED:                            \n" // test_n
+            RED("TEST %d FAILED:                        \n") // test_n
             "solve_linear_equation(%lg, %lg, ...) ->    \n" // kf_a, kf_b
             "\t-> n_roots = %d, x = %lf                 \n" // n_r, x
-            "(should be %d, %lf)                        \n", // ref n_r, ref x
+            "(should be %d, %lf)                      \n\n", // ref n_r, ref x
             test_data->ss_test_n,
             test_data->ss_kf_a, test_data->ss_kf_b,
             n_roots, x,
@@ -212,16 +216,16 @@ int TEST_solve_linear_equation(int * const count_tests) {
     (0, 0) -> INF
     */
 
-    FILE *fp = fopen("math_equation_solver/solve_linear_equation_test_data.txt", "r");
-    struct TEST_DATA_solve_linear_equation tests[100];
+    FILE *fp = fopen("test/solve_linear_equation_test_data.txt", "r");
+    struct TEST_DATA_solve_linear_equation tests[100] = {};
     size_t num_of_tests = 0;
 
-    uint16_t num = 0;
+    uint32_t num = 0;
     if (fp) {
         for(int i = 0;;++i) {
             double a = 0, b = 0, x = 0;
             int n_roots = 0;
-            if (fscanf(fp, "#%hd (%lf, %lf) -> %d, %lf", &num, &a, &b, &n_roots, &x)){
+            if (fscanf(fp, "#%d (%lf, %lf) -> %d, %lf", &num, &a, &b, &n_roots, &x) == 5){
                 // printf("#%hd (%lf, %lf) -> %d, %lf\n", num, a, b, n_roots, x);
 
                 tests[i] = {

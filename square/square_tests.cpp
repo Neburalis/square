@@ -6,9 +6,10 @@
 #include "real_number_utils.h"
 
 #include "square_tests.h"
+#include "../macro.h"
 
 struct TEST_DATA_square_solver {
-    uint16_t ss_test_n;
+    uint32_t ss_test_n;
     double ss_kf_a, ss_kf_b, ss_kf_c;
     enum solutions_count ss_reference_nRoots;
     double ss_reference_ans1, ss_reference_ans2;
@@ -56,10 +57,10 @@ static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_da
 
     if (is_failed)
         fprintf(stderr,
-            "TEST %d FAILED:                             \n" // test_n
+            RED("TEST %d FAILED:\n") // test_n
             "square_solver(%lg, %lg, %lg, ...) ->\n" // kf_a, kf_b, kf_c
             "\t-> n_roots = %d, x1 = %lf, x2 = %lf       \n" // n_r, x1, x2
-            "(should be %d, %lf, %lf)                    \n", // ref n_r, ref x1, ref x2
+            "(should be %d, %lf, %lf)                  \n\n", // ref n_r, ref x1, ref x2
             test_data->ss_test_n,
             test_data->ss_kf_a, test_data->ss_kf_b, test_data->ss_kf_c,
             n_roots, eq.ans1, eq.ans2,
@@ -83,101 +84,127 @@ int TEST_square_solver(int * const count_tests) {
     */
     int is_failed = 0;
 
-    struct TEST_DATA_square_solver tests[] = {
-        {
-            .ss_test_n           = 1,
-            .ss_kf_a             = 1,
-            .ss_kf_b             = -3,
-            .ss_kf_c             = 2,
-            .ss_reference_nRoots = TWO,
-            .ss_reference_ans1   = 1,
-            .ss_reference_ans2   = 2,
-        },
-        {
-            .ss_test_n           = 2,
-            .ss_kf_a             = 1,
-            .ss_kf_b             = 2,
-            .ss_kf_c             = 0,
-            .ss_reference_nRoots = TWO,
-            .ss_reference_ans1   = 0,
-            .ss_reference_ans2   = -2,
-        },
-        {
-            .ss_test_n           = 3,
-            .ss_kf_a             = 1,
-            .ss_kf_b             = 0,
-            .ss_kf_c             = 0,
-            .ss_reference_nRoots = ONE,
-            .ss_reference_ans1   = 0,
-            .ss_reference_ans2   = 0,
-        },
-        {
-            .ss_test_n           = 4,
-            .ss_kf_a             = 1,
-            .ss_kf_b             = 2,
-            .ss_kf_c             = 1,
-            .ss_reference_nRoots = ONE,
-            .ss_reference_ans1   = -1,
-            .ss_reference_ans2   = -1,
-        },
-        {
-            .ss_test_n           = 5,
-            .ss_kf_a             = 0,
-            .ss_kf_b             = 2,
-            .ss_kf_c             = 0,
-            .ss_reference_nRoots = ONE,
-            .ss_reference_ans1   = 0,
-            .ss_reference_ans2   = 0,
-        },
-        {
-            .ss_test_n           = 6,
-            .ss_kf_a             = 0,
-            .ss_kf_b             = 2,
-            .ss_kf_c             = 5,
-            .ss_reference_nRoots = ONE,
-            .ss_reference_ans1   = -2.5,
-            .ss_reference_ans2   = -2.5,
-        },
-        {
-            .ss_test_n           = 7,
-            .ss_kf_a             = 1,
-            .ss_kf_b             = 0,
-            .ss_kf_c             = 2,
-            .ss_reference_nRoots = NO,
-            .ss_reference_ans1   = NAN,
-            .ss_reference_ans2   = NAN,
-        },
-        {
-            .ss_test_n           = 8,
-            .ss_kf_a             = 0,
-            .ss_kf_b             = 0,
-            .ss_kf_c             = 2,
-            .ss_reference_nRoots = NO,
-            .ss_reference_ans1   = NAN,
-            .ss_reference_ans2   = NAN,
-        },
-        {
-            .ss_test_n           = 9,
-            .ss_kf_a             = 0,
-            .ss_kf_b             = 0,
-            .ss_kf_c             = -5,
-            .ss_reference_nRoots = NO,
-            .ss_reference_ans1   = NAN,
-            .ss_reference_ans2   = NAN,
-        },
-        {
-            .ss_test_n           = 10,
-            .ss_kf_a             = 0,
-            .ss_kf_b             = 0,
-            .ss_kf_c             = 0,
-            .ss_reference_nRoots = INF,
-            .ss_reference_ans1   = NAN,
-            .ss_reference_ans2   = NAN,
-        },
-    };
+    FILE *fp = fopen("test/square_solver_test_data.txt", "r");
+    struct TEST_DATA_square_solver tests[100000];
+    size_t num_of_tests = 0;
 
-    size_t n = sizeof(tests) / sizeof(tests[0]);
-    for (size_t i = 0; i<n; ++i) {
+    uint32_t num = 0;
+    if (fp) {
+        for(int i = 0;;++i) {
+            double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
+            int n_roots = 0;
+            if (fscanf(fp, "#%d (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
+                // printf("#%hd (%lf, %lf, %lf) -> %d, %lf, %lf\n", num, a, b, c, n_roots, x1, x2);
+
+                tests[i] = {
+                    .ss_test_n = num,
+                    .ss_kf_a = a, .ss_kf_b = b, .ss_kf_c = c,
+                    .ss_reference_nRoots = (solutions_count) n_roots,
+                    .ss_reference_ans1 = x1, .ss_reference_ans2 = x2,
+                };
+                ++num_of_tests;
+            }
+
+            if (getc(fp) == EOF)
+                break;
+        }
+        fclose(fp);
+    }
+
+    // struct TEST_DATA_square_solver tests[] = {
+    //     {
+    //         .ss_test_n           = 1,
+    //         .ss_kf_a             = 1,
+    //         .ss_kf_b             = -3,
+    //         .ss_kf_c             = 2,
+    //         .ss_reference_nRoots = TWO,
+    //         .ss_reference_ans1   = 1,
+    //         .ss_reference_ans2   = 2,
+    //     },
+    //     {
+    //         .ss_test_n           = 2,
+    //         .ss_kf_a             = 1,
+    //         .ss_kf_b             = 2,
+    //         .ss_kf_c             = 0,
+    //         .ss_reference_nRoots = TWO,
+    //         .ss_reference_ans1   = 0,
+    //         .ss_reference_ans2   = -2,
+    //     },
+    //     {
+    //         .ss_test_n           = 3,
+    //         .ss_kf_a             = 1,
+    //         .ss_kf_b             = 0,
+    //         .ss_kf_c             = 0,
+    //         .ss_reference_nRoots = ONE,
+    //         .ss_reference_ans1   = 0,
+    //         .ss_reference_ans2   = 0,
+    //     },
+    //     {
+    //         .ss_test_n           = 4,
+    //         .ss_kf_a             = 1,
+    //         .ss_kf_b             = 2,
+    //         .ss_kf_c             = 1,
+    //         .ss_reference_nRoots = ONE,
+    //         .ss_reference_ans1   = -1,
+    //         .ss_reference_ans2   = -1,
+    //     },
+    //     {
+    //         .ss_test_n           = 5,
+    //         .ss_kf_a             = 0,
+    //         .ss_kf_b             = 2,
+    //         .ss_kf_c             = 0,
+    //         .ss_reference_nRoots = ONE,
+    //         .ss_reference_ans1   = 0,
+    //         .ss_reference_ans2   = 0,
+    //     },
+    //     {
+    //         .ss_test_n           = 6,
+    //         .ss_kf_a             = 0,
+    //         .ss_kf_b             = 2,
+    //         .ss_kf_c             = 5,
+    //         .ss_reference_nRoots = ONE,
+    //         .ss_reference_ans1   = -2.5,
+    //         .ss_reference_ans2   = -2.5,
+    //     },
+    //     {
+    //         .ss_test_n           = 7,
+    //         .ss_kf_a             = 1,
+    //         .ss_kf_b             = 0,
+    //         .ss_kf_c             = 2,
+    //         .ss_reference_nRoots = NO,
+    //         .ss_reference_ans1   = NAN,
+    //         .ss_reference_ans2   = NAN,
+    //     },
+    //     {
+    //         .ss_test_n           = 8,
+    //         .ss_kf_a             = 0,
+    //         .ss_kf_b             = 0,
+    //         .ss_kf_c             = 2,
+    //         .ss_reference_nRoots = NO,
+    //         .ss_reference_ans1   = NAN,
+    //         .ss_reference_ans2   = NAN,
+    //     },
+    //     {
+    //         .ss_test_n           = 9,
+    //         .ss_kf_a             = 0,
+    //         .ss_kf_b             = 0,
+    //         .ss_kf_c             = -5,
+    //         .ss_reference_nRoots = NO,
+    //         .ss_reference_ans1   = NAN,
+    //         .ss_reference_ans2   = NAN,
+    //     },
+    //     {
+    //         .ss_test_n           = 10,
+    //         .ss_kf_a             = 0,
+    //         .ss_kf_b             = 0,
+    //         .ss_kf_c             = 0,
+    //         .ss_reference_nRoots = INF,
+    //         .ss_reference_ans1   = NAN,
+    //         .ss_reference_ans2   = NAN,
+    //     },
+    // };
+
+    for (size_t i = 0; i<num_of_tests; ++i) {
         int test_failed = ONE_TEST_square_solver(&tests[i]);
         if (!(test_failed))
             ++*count_tests;
