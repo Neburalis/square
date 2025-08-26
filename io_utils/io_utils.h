@@ -22,6 +22,9 @@
 
 #define string_t const char * const
 
+#define show_gif(filename) \
+    system("cd cat_gifs && qlmanage -p " filename " > /dev/null");
+
 /* msleep(): Sleep for the requested number of milliseconds. */
 int msleep(long msec);
 
