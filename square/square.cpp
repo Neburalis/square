@@ -6,7 +6,6 @@
 
 #include "io_utils.h"
 #include "real_number_utils.h"
-#include "../macro.h"
 
 enum solutions_count square_solver(struct square_equation * const eq) {
     assert(eq != NULL);
@@ -142,6 +141,9 @@ int quiet_output_square_solver_result(struct square_equation * const eq) {
 
 int pretty_output_square_solver_result(struct square_equation * const eq) {
     assert(eq != NULL);
+
+    printf("\nИщу корни квадратного уравнения\n");
+    spinner("Ведутся раскопки ", 2500, 150);
 
     switch (eq->status) {
         case SOLVED_TWO:

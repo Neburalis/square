@@ -1,8 +1,40 @@
 #include <assert.h>
+#include <errno.h>
 #include <math.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "io_utils.h"
+
+int msleep(long msec) {
+    struct timespec ts;
+    int res;
+
+    if (msec < 0) {
+        errno = EINVAL;
+        return -1;
+    }
+
+    ts.tv_sec = msec / 1000;
+    ts.tv_nsec = (msec % 1000) * 1000000;
+
+    do {
+        res = nanosleep(&ts, &ts);
+    } while (res && errno == EINTR);
+
+    return res;
+}
+
+void spinner(string_t str, uint32_t time, uint32_t period) {
+    const char pp[] = {'-', '\\', '|', '/'};
+    for (uint32_t i = 0; i < (int) time/period; ++i) {
+        printf("%s", str);
+        fflush(stdout);
+        printf("%c", pp[i%4]); // - \ | /
+        msleep(period);
+        printf("\r");
+    }
+}
 
 int clear_stdin_buffer() {
     while (getchar() != '\n')

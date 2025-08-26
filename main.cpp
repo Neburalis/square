@@ -10,11 +10,11 @@
 #include "math_equation_solver_tests.h"
 #include "real_number_utils.h"
 #include "real_number_utils_tests.h"
-#include "macro.h"
 
 int selfcheck() {
+    spinner("Selfchecking ", 2500, 150);
+
     int test_passed = 0;
-    printf("Selfcheck ...\n");
     uint8_t is_failed = 0;
     is_failed |= TEST_solve_square_equation(&test_passed);
     is_failed |= TEST_solve_linear_equation(&test_passed);
@@ -83,7 +83,6 @@ int main(int argc, char * argv[]) {
     while ( (rez = getopt(argc, argv, "chq")) != -1){
 		switch (rez) {
 		case 'c':
-            printf("Starting selfcheck\n");
             if (selfcheck()) {
                 printf("SELFCHECK FAILED. See stderr to view problem.\n");
                 abort();
@@ -91,7 +90,8 @@ int main(int argc, char * argv[]) {
             break;
 		case 'h':
             // TODO: add help param
-            printf("found argument \"h\".\n");
+            spinner("Думаю ", 5000, 150);
+            printf(GREEN("ПРАНК: ") "хелпа не будет, разбирайся сам\n");
             break;
 		case 'q': {
             int status = quiet_work();

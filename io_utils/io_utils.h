@@ -1,6 +1,32 @@
 #ifndef IO_UTILS_H
 #define IO_UTILS_H
 
+#include "ansi.h"
+
+#define RUNTIME_ERROR_BIG_STRING "\n" \
+" .+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+. \n" \
+"(      ____  _   _ _   _ _____ ___ __  __ _____   _____ ____  ____   ___  ____        )                     \n" \
+" )    |  _ \\| | | | \\ | |_   _|_ _|  \\/  | ____| | ____|  _ \\|  _ \\ / _ \\|  _ \\      (               \n" \
+"(     | |_) | | | |  \\| | | |  | || |\\/| |  _|   |  _| | |_) | |_) | | | | |_) |      )                   \n" \
+" )    |  _ <| |_| | |\\  | | |  | || |  | | |___  | |___|  _ <|  _ <| |_| |  _ <      (                     \n" \
+"(     |_| \\_\\\\___/|_| \\_| |_| |___|_|  |_|_____| |_____|_| \\_\\_| \\_\\\\___/|_| \\_\\      )          \n" \
+" )                                                                                   (                      \n" \
+"(                                                                                     )                     \n" \
+" \"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"\n\n"
+
+#define ERROR_MSG(format, ...) \
+    fprintf(stderr, RED(RUNTIME_ERROR_BIG_STRING) \
+            "In " GREEN("%s:%d") ", " YELLOW("%s") ".\n" format, \
+            __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__);
+
+
+#define string_t const char * const
+
+/* msleep(): Sleep for the requested number of milliseconds. */
+int msleep(long msec);
+
+void spinner(string_t str, uint32_t time, uint32_t period);
+
 /**
   @brief Функция отчистки буфера ввода
   Считывает данные из потока ввода до \\n (\n также будет считан)
