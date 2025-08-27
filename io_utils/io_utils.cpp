@@ -2,9 +2,20 @@
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 
 #include "io_utils.h"
+
+void show_gif(const char * const filename) {
+    char cmd[512];
+    snprintf(cmd, sizeof(cmd), "qlmanage -p cat_gifs/%s.gif > /dev/null 2>&1", filename);
+    system(cmd);
+}
+
+void show_random_gif(size_t n, char ** filenames) {
+    show_gif(filenames[random()%n]);
+}
 
 int msleep(long msec) {
     struct timespec ts;
@@ -87,9 +98,10 @@ double safe_get_double(const char * const var_name) {
         if (scanf_status && !isinf(var) && isfinite(var) && is_stdin_buffer_clean())
             return var;
         clear_stdin_buffer();
-        printf("😢 Вы ввели число, которое я не смог распознать.     "
-               "Попробуйте ввести правильное число (например 12.34). "
-               "Десятичный разделитель точка (.).\n                  ");
+        show_gif("lvl6cat1");
+        printf("😢 Вы ввели число, которое я не смог распознать.     \n"
+               "Попробуйте ввести правильное число (например 12.34). \n"
+               "Десятичный разделитель точка (.).                    \n");
     }
 }
 

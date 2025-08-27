@@ -39,7 +39,7 @@ int selfcheck() {
     if (!is_failed) {
         printf(GREEN("PASSED %u TESTS\n"), test_passed);
         // system("cd cat_gifs && qlmanage -p lvl1cat1.gif > /dev/null");
-        show_gif("lvl1cat1.gif");
+        show_gif("lvl1cat1");
         return 0;
     }
     else {

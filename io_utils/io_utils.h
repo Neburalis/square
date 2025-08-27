@@ -22,8 +22,9 @@
 
 #define string_t const char * const
 
-#define show_gif(filename) \
-    system("cd cat_gifs && qlmanage -p " filename " > /dev/null");
+void show_gif(const char * const filename);
+
+void show_random_gif(size_t n, char ** filenames);
 
 /* msleep(): Sleep for the requested number of milliseconds. */
 int msleep(long msec);

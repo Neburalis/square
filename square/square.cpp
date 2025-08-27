@@ -155,6 +155,11 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             "  | |  \\ V  V / (_) | \\__ \\ (_) | | |_| | |_| | (_) | | | \\__ \\_   \n"
             "  |_|   \\_/\\_/ \\___/  |___/\\___/|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n\n"
             "x1 = %lg\tx2 = %lg", eq->ans1, eq->ans2);
+            // random cat gif
+            {
+                const char * cat_gifs[] = {"lvl1cat2", "lvl1cat3"};
+                show_random_gif(2, (char **) cat_gifs);
+            }
             break;
         case SOLVED_ONE:
             printf(
@@ -164,6 +169,11 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             "| |_| | | | |  __/ \\__ \\ (_) | | |_| | |_| | (_) | | | \\__ \\_   \n"
             " \\___/|_| |_|\\___| |___/\\___/|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n\n"
             "x = %lg", eq->ans1);
+            // random cat gif
+            {
+                const char * cat_gifs[] = {"lvl2cat1", "lvl5cat1", "lvl4cat3"};
+                show_random_gif(3, (char **) cat_gifs);
+            }
             break;
         case SOLVED_NO:
             printf(
@@ -172,6 +182,11 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             "|  \\| |/ _ \\  / __|/ _ \\| | | | | __| |/ _ \\| '_ \\/ __(_) \n"
             "| |\\  | (_) | \\__ \\ (_) | | |_| | |_| | (_) | | | \\__ \\_  \n"
             "|_| \\_|\\___/  |___/\\___/|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n\n");
+            // random cat gif
+            {
+                const char * cat_gifs[] = {"lvl3cat1", "lvl6cat2"};
+                show_random_gif(2, (char **) cat_gifs);
+            }
             break;
         case SOLVED_INF:
             printf(
@@ -180,6 +195,11 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             " | || '_ \\| |_  / __|/ _ \\| | | | | __| |/ _ \\| '_ \\/ __(_)\n"
             " | || | | |  _| \\__ \\ (_) | | |_| | |_| | (_) | | | \\__ \\_ \n"
             "|___|_| |_|_|   |___/\\___/|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n\n");
+            // random cat gif
+            {
+                const char * cat_gifs[] = {"lvl4cat1", "lvl4cat2", "lvl4cat4"};
+                show_random_gif(3, (char **) cat_gifs);
+            }
             break;
         case NOT_INPUT:
             printf("ERROR: equation is not initialized.\n");
