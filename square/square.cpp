@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <errno.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -10,6 +11,15 @@
 enum solutions_count square_solver(struct square_equation * const eq) {
     assert(eq != NULL);
     assert(eq->status == NOT_SOLVE);
+
+    if (eq == NULL) {
+        errno = EINVAL;
+        return ERR;
+    }
+    if (eq->status != NOT_SOLVE) {
+        errno = EINVAL;
+        return ERR;
+    }
 
     double a = eq->kf_a, b = eq->kf_b, c = eq->kf_c;
 
@@ -69,6 +79,11 @@ enum solutions_count square_solver(struct square_equation * const eq) {
 void quiet_input_square_koef(struct square_equation * const eq) {
     assert(eq != NULL);
 
+    if (eq == NULL) {
+        errno = EINVAL;
+        return;
+    }
+
     scanf("%lf%lf%lf", &eq->kf_a, &eq->kf_b, &eq->kf_c);
     eq->status = NOT_SOLVE;
 
@@ -77,6 +92,11 @@ void quiet_input_square_koef(struct square_equation * const eq) {
 
 void pretty_input_square_koef(struct square_equation * const eq) {
     assert(eq != NULL);
+
+    if (eq == NULL) {
+        errno = EINVAL;
+        return;
+    }
 
     printf(CYAN(
         " ____                                                  \n"
@@ -110,6 +130,11 @@ void pretty_input_square_koef(struct square_equation * const eq) {
 int quiet_output_square_solver_result(struct square_equation * const eq) {
     assert(eq != NULL);
 
+    if (eq == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
+
     switch (eq->status) {
         case SOLVED_TWO:
             printf("%lg %lg\n", eq->ans1, eq->ans2);
@@ -134,13 +159,18 @@ int quiet_output_square_solver_result(struct square_equation * const eq) {
             return 1;
         default:
             // printf("ERROR: unexpected value in n_solutions, n_solutions = %d\n", eq->status);
-            return 1; // todo return enum
+            return 1; // TODO: return enum
     }
     return 0;
 }
 
 int pretty_output_square_solver_result(struct square_equation * const eq) {
     assert(eq != NULL);
+
+    if (eq == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
 
     printf("\n");
     spinner("Ведутся раскопки ", 1000, 150);
@@ -158,7 +188,7 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             // random cat gif
             {
                 const char * cat_gifs[] = {"lvl1cat2", "lvl1cat3"};
-                show_random_gif(2, (char **) cat_gifs);
+                show_random_gif(2, (const char **) cat_gifs);
             }
             break;
         case SOLVED_ONE:
@@ -172,7 +202,7 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             // random cat gif
             {
                 const char * cat_gifs[] = {"lvl2cat1", "lvl5cat1", "lvl4cat3"};
-                show_random_gif(3, (char **) cat_gifs);
+                show_random_gif(3, (const char **) cat_gifs);
             }
             break;
         case SOLVED_NO:
@@ -185,7 +215,7 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             // random cat gif
             {
                 const char * cat_gifs[] = {"lvl3cat1", "lvl6cat2"};
-                show_random_gif(2, (char **) cat_gifs);
+                show_random_gif(2, (const char **) cat_gifs);
             }
             break;
         case SOLVED_INF:
@@ -198,27 +228,32 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
             // random cat gif
             {
                 const char * cat_gifs[] = {"lvl4cat1", "lvl4cat2", "lvl4cat4"};
-                show_random_gif(3, (char **) cat_gifs);
+                show_random_gif(3, (const char **) cat_gifs);
             }
             break;
         case NOT_INPUT:
             printf("ERROR: equation is not initialized.\n");
-            return 1;
+            return -1;
         case NOT_SOLVE:
             printf("ERROR: equation has not been solved yet.\n");
-            return 1;
+            return -1;
         case SOLUTION_ERR:
             // ...
-            return 1;
+            return -1;
         default:
             printf("ERROR: unexpected value in n_solutions, n_solutions = %d\n", eq->status);
-            return 1; // todo return enum
+            return -1; // TODO: return enum
     }
     return 0;
 }
 
 int square_equation_minus_zero_fix(struct square_equation * const eq) {
     assert(eq != NULL);
+
+    if (eq == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
 
     if (eq->status == SOLVED_ONE) {
         minus_zero_fix(&eq->ans1);

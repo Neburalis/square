@@ -9,52 +9,10 @@
 #include "real_number_utils.h"
 #include "tester.h"
 
-int default_work() {
-    do {
-        struct square_equation eq = {
-            .status = NOT_INPUT,
-            .kf_a   = NAN,
-            .kf_b   = NAN,
-            .kf_c   = NAN,
-            .ans1   = NAN,
-            .ans2   = NAN,
-        };
+int default_work();
+int quiet_work();
 
-        pretty_input_square_koef(&eq);
-        square_solver(&eq);
-        square_equation_minus_zero_fix(&eq);
-        if(pretty_output_square_solver_result(&eq))
-            return -1;
-
-    }
-    // repeat?
-    while (is_user_want_continue("\n🔄 Хотите решить еще одно уравнение (Y/n)? "));
-
-    return 0;
-}
-
-int quiet_work() {
-    struct square_equation eq = {
-        .status = NOT_INPUT,
-        .kf_a   = NAN,
-        .kf_b   = NAN,
-        .kf_c   = NAN,
-        .ans1   = NAN,
-        .ans2   = NAN,
-    };
-
-    quiet_input_square_koef(&eq);
-    square_solver(&eq);
-    square_equation_minus_zero_fix(&eq);
-    if(quiet_output_square_solver_result(&eq))
-        return -1;
-
-    return 0;
-}
-
-int jwg(double a, double b) {
-    return isfinite((a / b));
-}
+// TODO: perror errno
 
 int main(int argc, char * argv[]) {
     int rez = 0;
@@ -68,7 +26,6 @@ int main(int argc, char * argv[]) {
             }
             break;
 		case 'h':
-            // TODO: add help param
             spinner("Думаю ", 5000, 150);
             printf(GREEN("ПРАНК: ") "хелпа не будет, разбирайся сам\n");
             break;
@@ -93,12 +50,57 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    printf(CYAN("\n"
+    printf(BOLD(CYAN("\n"
         " _   _       _             _                                   _ _      ____ ___ _____ _   _ _   _ ____           \n"
         "| | | |   __| | ___  _ __ | |_    ___ ___  _ __ ___  _ __ ___ (_) |_   / ___|_ _|_   _| | | | | | | __ )          \n"
         "| | | |  / _` |/ _ \\| '_ \\| __|  / __/ _ \\| '_ ` _ \\| '_ ` _ \\| | __| | |  _ | |  | | | |_| | | | |  _ \\    \n"
         "| |_| | | (_| | (_) | | | | |_  | (_| (_) | | | | | | | | | | | | |_  | |_| || |  | | |  _  | |_| | |_) |         \n"
         " \\___/   \\__,_|\\___/|_| |_|\\__|  \\___\\___/|_| |_| |_|_| |_| |_|_|\\__|  \\____|___| |_| |_| |_|\\___/|____/ \n\n"
-    ));
+    )));
+    return 0;
+}
+
+int default_work() {
+    do {
+        struct square_equation eq = {
+            .status = NOT_INPUT,
+            .kf_a   = NAN,
+            .kf_b   = NAN,
+            .kf_c   = NAN,
+            .ans1   = NAN,
+            .ans2   = NAN,
+        };
+
+        pretty_input_square_koef(&eq);
+        square_solver(&eq);
+        square_equation_minus_zero_fix(&eq);
+        if(pretty_output_square_solver_result(&eq)){
+            ERROR_MSG("Error message:%s\n", CYAN("pretty_output_square_solver_result is return not zero value"));
+            return -1;
+        }
+
+    }
+    // repeat?
+    while (is_user_want_continue("\n🔄 Хотите решить еще одно уравнение (Y/n)? ") == 1);
+
+    return 0;
+}
+
+int quiet_work() {
+    struct square_equation eq = {
+        .status = NOT_INPUT,
+        .kf_a   = NAN,
+        .kf_b   = NAN,
+        .kf_c   = NAN,
+        .ans1   = NAN,
+        .ans2   = NAN,
+    };
+
+    quiet_input_square_koef(&eq);
+    square_solver(&eq);
+    square_equation_minus_zero_fix(&eq);
+    if(quiet_output_square_solver_result(&eq))
+        return -1;
+
     return 0;
 }

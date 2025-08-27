@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -10,12 +11,19 @@
 #include "io_utils.h"
 
 struct TEST_DATA_square_solver {
-    uint32_t ss_test_n;
-    double ss_kf_a, ss_kf_b, ss_kf_c;
-    enum solutions_count ss_reference_nRoots;
-    double ss_reference_ans1, ss_reference_ans2;
+    uint32_t                ss_test_n;
+    double                  ss_kf_a, ss_kf_b, ss_kf_c;
+    enum solutions_count    ss_reference_nRoots;
+    double                  ss_reference_ans1, ss_reference_ans2;
 };
 static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_data) {
+    assert(test_data != NULL && "You must pass test_data struct to func");
+
+    if (test_data == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
+
     int is_failed = 0;
 
     struct square_equation eq = {
@@ -68,7 +76,7 @@ static int ONE_TEST_square_solver(struct TEST_DATA_square_solver const * test_da
         );
     return is_failed;
 }
-int TEST_square_solver(FILE *fp, uint32_t * const count_tests) {
+int TEST_square_solver(FILE * const fp, uint32_t * const count_tests) {
     /*
     #1 (1, -3, 2) -> TWO, 1, 2
     #2 (1, 2, 0) -> TWO, 0, -2
@@ -81,10 +89,18 @@ int TEST_square_solver(FILE *fp, uint32_t * const count_tests) {
     #9 (0, 0, -5) -> NO
     #10(0, 0, 0) -> INF
     */
+    assert(fp != NULL           && "You must pass FILE to func");
+    assert(count_tests != NULL  && "You must pass count_test value to func");
+
     if (!fp){
         errno = EBADF;
         return -1;
     }
+    if (count_tests == NULL){
+        errno = EBADF;
+        return -1;
+    }
+
     size_t line_num = lines_in_file(fp);
     int is_failed = 0;
 
@@ -93,31 +109,29 @@ int TEST_square_solver(FILE *fp, uint32_t * const count_tests) {
 
     size_t num_of_tests = 0;
 
-    if (fp) {
-        for(int i = 0;;++i) {
-            uint32_t num = 0;
-            double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
-            int n_roots = 0;
-            if (fscanf(fp, "#%u (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
+    for(int i = 0;;++i) {
+        uint32_t num = 0;
+        double a = 0, b = 0, c = 0, x1 = 0, x2 = 0;
+        int n_roots = 0;
+        if (fscanf(fp, "#%u (%lf, %lf, %lf) -> %d, %lf, %lf", &num, &a, &b, &c, &n_roots, &x1, &x2) == 7){
 
-                tests[i] = {
-                    .ss_test_n = num,
-                    .ss_kf_a = a, .ss_kf_b = b, .ss_kf_c = c,
-                    .ss_reference_nRoots = (solutions_count) n_roots,
-                    .ss_reference_ans1 = x1, .ss_reference_ans2 = x2,
-                };
-                ++num_of_tests;
-            }
-
-            if (getc(fp) == EOF)
-                break;
+            tests[i] = {
+                .ss_test_n = num,
+                .ss_kf_a = a, .ss_kf_b = b, .ss_kf_c = c,
+                .ss_reference_nRoots = (solutions_count) n_roots,
+                .ss_reference_ans1 = x1, .ss_reference_ans2 = x2,
+            };
+            ++num_of_tests;
         }
-        fclose(fp);
-    }
 
-    for (size_t i = 0; i<num_of_tests; ++i) {
+        if (getc(fp) == EOF)
+            break;
+    }
+    fclose(fp);
+
+    for (size_t i = 0; i < num_of_tests; ++i) {
         int test_failed = ONE_TEST_square_solver(&tests[i]);
-        if (!(test_failed))
+        if (!test_failed)
             ++*count_tests;
         is_failed |= test_failed;
     }

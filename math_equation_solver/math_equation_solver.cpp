@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <errno.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -25,9 +26,20 @@ enum solutions_count solve_square_equation(double a, double b, double c,
 
     assert(!is_zero(a));
 
+    if (!isfinite(a) || !isfinite(b) || isfinite(c)) {
+        errno = EINVAL; // koefs must be finite
+        return ERR;
+    }
+
+    if (x1 == NULL || x2 == NULL || x1 == x2) {
+        errno = EINVAL; // ptrs must be not NULL and not the same
+        return ERR;
+    }
+
     double d = b * b - 4 * a * c;
 
-    if (!isfinite(d)){
+    if (!isfinite(d)) {
+        errno = ERANGE; // d out of range
         ERROR_MSG(CYAN("message:") " %s\n", "результат вычисления дискриминанта некорректен (возможно, переполнение или несогласованные данные).");
         return ERR;
     }
@@ -59,6 +71,16 @@ enum solutions_count solve_linear_equation(double a, double b,
     assert(isfinite(b));
 
     assert(x != NULL);
+
+    if (!isfinite(a) || !isfinite(b)) {
+        errno = EINVAL; // koefs must be finite
+        return ERR;
+    }
+
+    if (x == NULL) {
+        errno = EINVAL; // ptr must be not NULL
+        return ERR;
+    }
 
     if (!is_zero(a)) {
         *x = -b / a;

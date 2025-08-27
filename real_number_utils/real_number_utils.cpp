@@ -14,7 +14,7 @@ int is_zero(double var) {
 }
 
 int compare_double(double first, double second) {
-    assert(isfinite(first) && "first must be finite");
+    assert(isfinite(first)  && "first must be finite");
     assert(isfinite(second) && "second must be finite");
 
     if (fabs(first - second) < MIN_TOLERANCE)
