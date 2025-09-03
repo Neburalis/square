@@ -2,15 +2,19 @@
 #include <math.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "square.h"
 #include "io_utils.h"
 #include "math_equation_solver.h"
 #include "real_number_utils.h"
 #include "tester.h"
+#include "stringNthong.h"
 
 int default_work();
 int quiet_work();
+
+#define FREE(ptr)  free(ptr); ptr = NULL;
 
 // TODO: perror errno
 
@@ -78,7 +82,6 @@ int default_work() {
             ERROR_MSG("Error message:%s\n", CYAN("pretty_output_square_solver_result is return not zero value"));
             return -1;
         }
-
     }
     // repeat?
     while (is_user_want_continue("\n🔄 Хотите решить еще одно уравнение (Y/n)? ") == 1);

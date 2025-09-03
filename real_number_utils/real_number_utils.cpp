@@ -46,8 +46,8 @@ double map(double value,
     assert(!isnan(res_min)        && "res_min must be not nan number");
     assert(!isnan(res_max)        && "res_max must be not nan number");
 
-    assert(value_min < value_max    && "value_min must be less than value_max");
-    assert(res_min   < res_max      && "res_min must be less than res_max");
+    // assert(value_min < value_max    && "value_min must be less than value_max");
+    // assert(res_min   < res_max      && "res_min must be less than res_max");
 
     value -= value_min;
     value *= (res_max - res_min);

@@ -51,29 +51,30 @@ ifeq ($(UNAME_S), Darwin)
 endif
 
 CXXFLAGS = $(CXXFLAGS_OS) $(CXXFLAGS_ARCH) \
-	-Iio_utils -Imath_equation_solver -Ireal_number_utils -Isquare -Itest
+	-Iio_utils -Imath_equation_solver -Ireal_number_utils -Isquare -Itest -Ithong
 
 TARGET = a.out
 SOURCES = main.cpp \
-	io_utils/io_utils.cpp \
-	math_equation_solver/math_equation_solver.cpp \
-	math_equation_solver/math_equation_solver_tests.cpp \
-	real_number_utils/real_number_utils.cpp \
-	real_number_utils/real_number_utils_tests.cpp \
-	square/square.cpp \
-	square/square_tests.cpp \
-    test/tester.cpp
+	      io_utils/io_utils.cpp \
+	      math_equation_solver/math_equation_solver.cpp \
+	      math_equation_solver/math_equation_solver_tests.cpp \
+	      real_number_utils/real_number_utils.cpp \
+	      real_number_utils/real_number_utils_tests.cpp \
+	      square/square.cpp \
+	      square/square_tests.cpp \
+          test/tester.cpp \
+          thong/stringNthong.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 HEADERS = io_utils/io_utils.h \
-	macro.h \
-	math_equation_solver/math_equation_solver.h \
-	math_equation_solver/math_equation_solver_tests.h \
-	real_number_utils/real_number_utils.h \
-	real_number_utils/real_number_utils_tests.h \
-	square/square.h \
-	square/square_tests.h \
-    test/tester.h
+	      math_equation_solver/math_equation_solver.h \
+	      math_equation_solver/math_equation_solver_tests.h \
+	      real_number_utils/real_number_utils.h \
+	      real_number_utils/real_number_utils_tests.h \
+	      square/square.h \
+	      square/square_tests.h \
+          test/tester.h \
+          thong/stringNthong.h
 
 # --- Цель сборки ---
 $(TARGET): $(OBJECTS)
