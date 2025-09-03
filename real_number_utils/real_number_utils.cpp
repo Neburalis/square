@@ -35,3 +35,23 @@ int minus_zero_fix(double * const variable) {
     }
     return -1;
 }
+
+double map(double value,
+           double value_min, double value_max,
+           double res_min, double res_max
+          ) {
+    assert(!isnan(value)          && "value must be not nan number");
+    assert(!isnan(value_min)      && "value_min must be not nan number");
+    assert(!isnan(value_max)      && "value_max must be not nan number");
+    assert(!isnan(res_min)        && "res_min must be not nan number");
+    assert(!isnan(res_max)        && "res_max must be not nan number");
+
+    assert(value_min < value_max    && "value_min must be less than value_max");
+    assert(res_min   < res_max      && "res_min must be less than res_max");
+
+    value -= value_min;
+    value *= (res_max - res_min);
+    value /= (value_max - value_min);
+
+    return value + res_min;
+}

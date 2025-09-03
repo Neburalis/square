@@ -15,4 +15,9 @@ int compare_double(double a, double b);
 
 int minus_zero_fix(double * const variable);
 
+double map(double value,
+    double value_min, double value_max,
+    double res_min, double res_max
+);
+
 #endif // REAL_NUMBER_UTILS_H
