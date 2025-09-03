@@ -6,7 +6,7 @@
 const double MIN_TOLERANCE = 1E-6;
 
 int is_zero(double var) {
-    assert(isfinite(var));
+    assert(!isnan(var));
 
     if (fabs(var) < MIN_TOLERANCE)
         return 1;
@@ -14,8 +14,8 @@ int is_zero(double var) {
 }
 
 int compare_double(double first, double second) {
-    assert(isfinite(first)  && "first must be finite");
-    assert(isfinite(second) && "second must be finite");
+    assert(!isnan(first)  && "first must be not nan");
+    assert(!isnan(second) && "second must be not nan");
 
     if (fabs(first - second) < MIN_TOLERANCE)
         return 0;
@@ -27,7 +27,7 @@ int compare_double(double first, double second) {
 
 int minus_zero_fix(double * const variable) {
     assert(variable != NULL);
-    assert(isfinite(*variable));
+    assert(!isnan(*variable));
 
     if (is_zero(*variable)){
         *variable = fabs(*variable);

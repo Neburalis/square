@@ -16,9 +16,9 @@
 
 enum solutions_count solve_square_equation(double a, double b, double c,
                           double * const x1, double * const x2) {
-    assert(isfinite(a));
-    assert(isfinite(b));
-    assert(isfinite(c));
+    assert(!isnan(a));
+    assert(!isnan(b));
+    assert(!isnan(c));
 
     assert(x1 != NULL);
     assert(x2 != NULL);
@@ -26,19 +26,23 @@ enum solutions_count solve_square_equation(double a, double b, double c,
 
     assert(!is_zero(a));
 
-    if (!isfinite(a) || !isfinite(b) || isfinite(c)) {
+    if (isnan(a) ||
+        isnan(b) ||
+        isnan(c)) {
         errno = EINVAL; // koefs must be finite
+        ERROR_MSG("один из коэффициентов нан\na = %lg, b = %lg, c = %lg", a, b, c);
         return ERR;
     }
 
     if (x1 == NULL || x2 == NULL || x1 == x2) {
         errno = EINVAL; // ptrs must be not NULL and not the same
+        ERROR_MSG("получил null ptr или одинаковые указатели");
         return ERR;
     }
 
     double d = b * b - 4 * a * c;
 
-    if (!isfinite(d)) {
+    if (isnan(d)) {
         errno = ERANGE; // d out of range
         ERROR_MSG(CYAN("message:") " %s\n", "результат вычисления дискриминанта некорректен (возможно, переполнение или несогласованные данные).");
         return ERR;
@@ -67,18 +71,20 @@ enum solutions_count solve_square_equation(double a, double b, double c,
 
 enum solutions_count solve_linear_equation(double a, double b,
                           double * const x) {
-    assert(isfinite(a));
-    assert(isfinite(b));
+    assert(!isnan(a));
+    assert(!isnan(b));
 
     assert(x != NULL);
 
-    if (!isfinite(a) || !isfinite(b)) {
+    if (isnan(a) || isnan(b)) {
         errno = EINVAL; // koefs must be finite
+        ERROR_MSG("один из коэффициентов нан");
         return ERR;
     }
 
     if (x == NULL) {
         errno = EINVAL; // ptr must be not NULL
+        ERROR_MSG("передан null ptr");
         return ERR;
     }
 

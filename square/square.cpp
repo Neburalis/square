@@ -9,15 +9,17 @@
 #include "real_number_utils.h"
 
 enum solutions_count square_solver(struct square_equation * const eq) {
-    assert(eq != NULL);
-    assert(eq->status == NOT_SOLVE);
+    assert(eq != NULL               && "eq must be not null ptr");
+    assert(eq->status == NOT_SOLVE  && "eq status must be not_solve");
 
     if (eq == NULL) {
         errno = EINVAL;
+        ERROR_MSG("%s", "eq is NULL");
         return ERR;
     }
     if (eq->status != NOT_SOLVE) {
         errno = EINVAL;
+        ERROR_MSG("%s", "eq status must be not solve");
         return ERR;
     }
 
@@ -41,12 +43,15 @@ enum solutions_count square_solver(struct square_equation * const eq) {
                 return TWO;
             case INF:
                 eq->status = SOLUTION_ERR;
+                ERROR_MSG("%s", "получил бесконечность решений у квадратного уравнения (ожидал 2, 1 или 0)");
                 return ERR;
             case ERR:
                 eq->status = SOLUTION_ERR;
+                ERROR_MSG("%s", "получил ошибку при решении квадратного уравнения");
                 return ERR;
             default:
                 eq->status = SOLUTION_ERR;
+                ERROR_MSG("%s", "получил неожидаемое значение при решении квадратного уравнения");
                 return ERR;
         }
     }
@@ -66,21 +71,26 @@ enum solutions_count square_solver(struct square_equation * const eq) {
                 return INF;
             case TWO:
                 eq->status = SOLUTION_ERR;
+                ERROR_MSG("%s", "получил 2 решения у линейного уравнения (ожидал 1, 0 или inf)");
                 return ERR;
             case ERR:
                 eq->status = SOLUTION_ERR;
+                ERROR_MSG("%s", "получил ошибку при решении линейного уравнения");
                 return ERR;
             default:
+                eq->status = SOLUTION_ERR;
+                ERROR_MSG("%s", "получил неожидаемое значение при решении линейного уравнения");
                 return ERR;
         }
     }
 }
 
 void quiet_input_square_koef(struct square_equation * const eq) {
-    assert(eq != NULL);
+    assert(eq != NULL && "eq must be not null ptr");
 
     if (eq == NULL) {
         errno = EINVAL;
+        ERROR_MSG("%s", "eq must be not null ptr");
         return;
     }
 
@@ -91,10 +101,11 @@ void quiet_input_square_koef(struct square_equation * const eq) {
 }
 
 void pretty_input_square_koef(struct square_equation * const eq) {
-    assert(eq != NULL);
+    assert(eq != NULL && "eq must be not null ptr");
 
     if (eq == NULL) {
         errno = EINVAL;
+        ERROR_MSG("%s", "eq must be not null ptr");
         return;
     }
 
@@ -128,10 +139,11 @@ void pretty_input_square_koef(struct square_equation * const eq) {
 }
 
 int quiet_output_square_solver_result(struct square_equation * const eq) {
-    assert(eq != NULL);
+    assert(eq != NULL && "eq must be not null ptr");
 
     if (eq == NULL) {
         errno = EINVAL;
+        ERROR_MSG("%s", "eq must be not null ptr");
         return -1;
     }
 
@@ -165,10 +177,11 @@ int quiet_output_square_solver_result(struct square_equation * const eq) {
 }
 
 int pretty_output_square_solver_result(struct square_equation * const eq) {
-    assert(eq != NULL);
+    assert(eq != NULL && "eq must be not null ptr");
 
     if (eq == NULL) {
         errno = EINVAL;
+        ERROR_MSG("%s", "eq must be not null ptr");
         return -1;
     }
 
@@ -248,10 +261,11 @@ int pretty_output_square_solver_result(struct square_equation * const eq) {
 }
 
 int square_equation_minus_zero_fix(struct square_equation * const eq) {
-    assert(eq != NULL);
+    assert(eq != NULL && "eq must be not null ptr");
 
     if (eq == NULL) {
         errno = EINVAL;
+        ERROR_MSG("eq must be not null ptr");
         return -1;
     }
 

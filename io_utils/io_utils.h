@@ -14,10 +14,11 @@
   "(                                                                                     )                     \n" \
   " \"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"+.+\"\n\n"
 
+// macro for print pretty error message with code place with problem
 #define ERROR_MSG(format, ...) \
-    fprintf(stderr, RED(RUNTIME_ERROR_BIG_STRING) \
-            "In " GREEN("%s:%d") ", " YELLOW("%s") ".\n" format, \
-            __FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__);
+    fprintf(stderr, \
+            "In " GREEN("%s:%d") ", " YELLOW("%s") ".\n" format "\n", \
+            __FILE__, __LINE__, __PRETTY_FUNCTION__, ##__VA_ARGS__);
 
 
 #define string_t const char * const
