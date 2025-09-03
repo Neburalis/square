@@ -51,7 +51,7 @@ ifeq ($(UNAME_S), Darwin)
 endif
 
 CXXFLAGS = $(CXXFLAGS_OS) $(CXXFLAGS_ARCH) \
-	-Iio_utils -Imath_equation_solver -Ireal_number_utils -Isquare -Itest -Ithong
+	-Iio_utils -Imath_equation_solver -Ireal_number_utils -Isquare -Itest -Istring_and_thong
 
 TARGET = a.out
 SOURCES = main.cpp \
@@ -63,7 +63,7 @@ SOURCES = main.cpp \
 	      square/square.cpp \
 	      square/square_tests.cpp \
           test/tester.cpp \
-          thong/stringNthong.cpp
+          string_and_thong/stringNthong.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 HEADERS = io_utils/io_utils.h \
@@ -74,7 +74,7 @@ HEADERS = io_utils/io_utils.h \
 	      square/square.h \
 	      square/square_tests.h \
           test/tester.h \
-          thong/stringNthong.h
+          string_and_thong/stringNthong.h
 
 # --- Цель сборки ---
 $(TARGET): $(OBJECTS)
