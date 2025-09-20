@@ -1,3 +1,6 @@
 [submodule "string_and_thong"]
 	path = string_and_thong
 	url = https://github.com/Neburalis/string_and_thomg.git
+[submodule "io_utils"]
+	path = io_utils
+	url = git@github.com:Neburalis/io_utils.git
